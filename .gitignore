@@ -1,0 +1,6 @@
+#ignore Netbeans dirs and files
+./nbproject/*
+./dist/*
+./build/*
+list
+dep.inc
