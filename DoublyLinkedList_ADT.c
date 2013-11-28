@@ -128,7 +128,7 @@ int dll_insert_at_end(dllistptr list, void* data, void* (*duplicate)(void*))
         list->size++;
         elem->next = NULL;
         elem->previous = NULL;
-        elem->data = data;
+        elem->data = (*duplicate)(data);
         return 0;
     }
     else {
@@ -142,7 +142,7 @@ int dll_insert_at_end(dllistptr list, void* data, void* (*duplicate)(void*))
         list->tail = elem;
         list->size++;
         elem->next = NULL;
-        elem->data = data;
+        elem->data = (*duplicate)(data);
         return 0;
     }
 }
@@ -161,7 +161,8 @@ int dll_insert_at_end(dllistptr list, void* data, void* (*duplicate)(void*))
  *      [*] Returns 1, if (1st parameter < 2nd parameter)
  *      [*] Returns 0, if (1st parameter >= 2nd parameter) 
  */
-int dll_insert_sorted(dllistptr list, void* data,  int (*issmaller)(void*, void*) )
+int dll_insert_sorted(dllistptr list, void* data, 
+        int (*issmaller)(void*, void*), void* (*duplicate)(void*))
 {
     /*
      * Scenarios:
@@ -194,7 +195,7 @@ int dll_insert_sorted(dllistptr list, void* data,  int (*issmaller)(void*, void*
         list->size++;
         elem->next = NULL;
         elem->previous = NULL;
-        elem->data = data;
+        elem->data = (*duplicate)(data);
         return 0;
     }
     else {
@@ -212,7 +213,7 @@ int dll_insert_sorted(dllistptr list, void* data,  int (*issmaller)(void*, void*
             elem->next = NULL;
             list->tail = elem;
             list->size++;
-            elem->data = data;
+            elem->data = (*duplicate)(data);
             return 0;
         }
         //search method
@@ -228,23 +229,6 @@ int dll_insert_sorted(dllistptr list, void* data,  int (*issmaller)(void*, void*
             }
         }while(1);
         //here we must identify which break occurred
-        /*if (current == list->tail)
-        {
-            //case in which the element is to be added into the end of the list
-            dllnodeptr elem = malloc(sizeof(struct DoublyLinkedListNode));
-            if (elem == NULL)
-            {
-                perror("Sorted_insertion: tail insertion, error: ");
-                return -1;
-            }
-            current->next = elem;
-            elem->previous = current;
-            elem->next = NULL;
-            list->tail = elem;
-            list->size++;
-            copy_data(&(elem->data), data);
-            return 0;
-        }*/
         if (current == list->head) {
             //case in which the element is to be added into the start of the list
             dllnodeptr elem = malloc(sizeof(struct DoublyLinkedListNode));
@@ -257,7 +241,7 @@ int dll_insert_sorted(dllistptr list, void* data,  int (*issmaller)(void*, void*
             (elem->next)->previous = elem;
             list->head = elem;
             list->size++;
-            elem->data = data;
+            elem->data = (*duplicate)(data);
             return 0;
         }
         else {
@@ -272,7 +256,7 @@ int dll_insert_sorted(dllistptr list, void* data,  int (*issmaller)(void*, void*
             current->previous = elem;
             elem->next = current;
             list->size++;
-            elem->data = data;
+            elem->data = (*duplicate)(data);
             return 0;
         }
     }

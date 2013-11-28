@@ -27,9 +27,6 @@ int main(int argc, char** argv) {
      *      Delete
      *      Search
      */
-      
-    
-    
     dllistptr list = NULL;
     cneg(dll_init(&list));
     
@@ -37,47 +34,18 @@ int main(int argc, char** argv) {
     Data_int data;
     // Inserting dummy data
     data = allocate_datatype_int();
-    if (data != NULL)
-    {
-        data->datum = 5;
-        cneg(dll_insert_at_end(list, (void *)data, &duplicate_datatype_int));
-    }
-    data = allocate_datatype_int();
-    if (data != NULL)
-    {
-        data->datum = 200;
-        cneg(dll_insert_at_end(list, (void *)data, &duplicate_datatype_int));
-    }
-    data = allocate_datatype_int();
-    if (data != NULL)
-    {
-        data->datum = 10;
-        cneg(dll_insert_at_end(list, (void *)data, &duplicate_datatype_int));
-    }
-    data = allocate_datatype_int();
-    if (data != NULL)
-    {
-        data->datum = 2;
-        cneg(dll_insert_at_end(list, (void *)data, &duplicate_datatype_int));
-    }
-    data = allocate_datatype_int();
-    if (data != NULL)
-    {
-        data->datum = -6;
-        cneg(dll_insert_at_end(list, (void *)data, &duplicate_datatype_int));
-    }
-    dll_print(list, &print_int);
-    printf("===============================================================\n");
-    data = allocate_datatype_int();
+    data->datum = 5;
+    cneg(dll_insert_sorted(list, data, &issmaller_int, &duplicate_datatype_int));
+    data->datum = 2;
+    cneg(dll_insert_sorted(list, data, &issmaller_int, &duplicate_datatype_int));
+    data->datum = -6;
+    cneg(dll_insert_sorted(list, data, &issmaller_int, &duplicate_datatype_int));
     data->datum = 200;
-    dll_print(list, &print_int);
-    print_int((void*)data);
-    cneg(dll_delete(list, data, &is_equal_int, &free_datatype_int)); 
+    cneg(dll_insert_sorted(list, data, &issmaller_int, &duplicate_datatype_int));
+    data->datum = 150;
+    cneg(dll_insert_sorted(list, data, &issmaller_int, &duplicate_datatype_int));
     dll_print(list, &print_int);
     printf("===============================================================\n");
-    
-    
-    
     
     // Adding a new key 
     Data_int key = NULL;
@@ -87,11 +55,13 @@ int main(int argc, char** argv) {
     Data_int retval = dll_get_data(list, (void*)key, &is_equal_int);
     if (retval == NULL)
         printf("Element not found\n");
-    else
-        print_int((void*)retval);
-    
+    else {
+        printf("Found this element: ");
+        print_int((void*)retval); putchar('\n');
+    }
     // Freeing the key allocated data
     free_datatype_int((void*)key);
+    
     
     // Creating a datum that exists in the list and deleting this item from the
     // list
@@ -99,10 +69,9 @@ int main(int argc, char** argv) {
     delthis = allocate_datatype_int();
     delthis->datum = -6;
     dll_delete(list, (void*)delthis, &is_equal_int, &free_datatype_int);
-    // Freeing the key of deletion, as well
-    free_datatype_int(delthis);
     dll_print(list, &print_int);
  
+    
     // Try and find the element that was deleted
     key = allocate_datatype_int();
     key->datum = -6;
@@ -113,9 +82,9 @@ int main(int argc, char** argv) {
         print_int((void*)retval);
     free_datatype_int((void*)key);
     
+    
     // Delete another list item
-    delthis = allocate_datatype_int();
-    delthis->datum = 2;
+    delthis->datum = 150;
     dll_delete(list, (void*)delthis, &is_equal_int, &free_datatype_int);
     free_datatype_int(delthis);
     dll_print(list, &print_int);
@@ -123,7 +92,6 @@ int main(int argc, char** argv) {
     
    // Destroy the list    
     dll_destroy(&list, &free_datatype_int);
-    
     return (EXIT_SUCCESS);
 }
 

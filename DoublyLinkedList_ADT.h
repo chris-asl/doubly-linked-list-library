@@ -52,7 +52,8 @@ extern "C"
      *      [*] On success,  0 is returned
      *      [*] On failure,  -1 is returned
      */
-    int dll_insert_sorted(dllistptr, void*, int (* )( void*, void* ) );
+    int dll_insert_sorted(dllistptr, void*, int (* )( void*, void* ), 
+                            void* (*)(void*));
     /*
     * Function responsible for inserting an element into the list while keeping it
     * sorted by a comparison defined by the user with a function called 
