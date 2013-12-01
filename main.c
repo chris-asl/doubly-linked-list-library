@@ -59,6 +59,7 @@ int main(int argc, char** argv) {
         printf("Found this element: ");
         print_int((void*)retval); putchar('\n');
     }
+    retval->datum = 10000;
     // Freeing the key allocated data
     free_datatype_int((void*)key);
     
@@ -88,9 +89,54 @@ int main(int argc, char** argv) {
     dll_delete(list, (void*)delthis, &is_equal_int, &free_datatype_int);
     free_datatype_int(delthis);
     dll_print(list, &print_int);
-     
-    
-   // Destroy the list    
+    printf("===============================================================\n");
+    printf("dll_get_front: "); 
+    retval = dll_get_front(list, &duplicate_datatype_int);
+    print_int(retval);
+    free_datatype_int(retval);
+    putchar('\n');
+    printf("dll_get_back: "); 
+    retval = dll_get_back(list, &duplicate_datatype_int);
+    print_int(retval);
+    free_datatype_int(retval);
+    retval = NULL;
+    putchar('\n');
+    printf("===============================================================\n");
+    //testing insert at back/front
+    data->datum = 12345;
+    cneg(dll_insert_at_back(list, data, &duplicate_datatype_int)); 
+    data->datum = 54321;
+    cneg(dll_insert_at_front(list, data, &duplicate_datatype_int));
+    dll_print(list, &print_int);
+    printf("===============================================================\n");
+    //testing insert before/after
+    data->datum = 555;
+    key = allocate_datatype_int();
+    key->datum = 54321;
+    cneg(dll_insert_before(list, data, &duplicate_datatype_int, key, &is_equal_int));
+    data->datum = 444;
+    cneg(dll_insert_after(list, data, &duplicate_datatype_int, key, &is_equal_int));
+    free_datatype_int(key);
+    dll_print(list, &print_int);
+    printf("===============================================================\n");
+    //testing delete back/front
+    dll_delete_front(list, &free_datatype_int);
+    dll_print(list, &print_int);
+    dll_delete_back(list, &free_datatype_int);
+    dll_print(list, &print_int);
+    printf("===============================================================\n");
+    dllistptr blist = NULL;
+    cneg(dll_init(&blist));
+    data->datum = 8;
+    cneg(dll_insert_at_back(blist, data, &duplicate_datatype_int));
+    data->datum = 9;
+    cneg(dll_insert_at_back(blist, data, &duplicate_datatype_int));
+    data->datum = 1992;
+    cneg(dll_insert_at_back(blist, data, &duplicate_datatype_int));
+    dll_print(blist, &print_int);
+    dll_append(list, &blist);
+    dll_print(list, &print_int);
+    // Destroy the list    
     dll_destroy(&list, &free_datatype_int);
     return (EXIT_SUCCESS);
 }

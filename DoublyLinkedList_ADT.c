@@ -45,6 +45,15 @@ int dll_init(dllistptr *listptr_addr)
     (*listptr_addr)->size = 0;
 }
 
+
+/*
+ * Function returning the size of the list
+ */
+int dll_size(dllistptr list)
+{
+    return list->size;
+}
+
 /*
  * Function responsible for checking if the list is empty
  * Return values:
@@ -57,7 +66,7 @@ int dll_isempty(dllistptr list)
         fprintf(stderr, "dll_isempty - Error: DLList has not been initialized\n");
         return -1;
     }
-    if (list->size == 0)
+    if (dll_size(list) == 0)
         return 1;
     else 
         return 0;
@@ -100,27 +109,32 @@ void dll_print(const dllistptr list, void (*print_data)(void* data))
 
 /*
  * Function responsible for inserting an element at the end of the list
+ * The 2nd and 3rd arguments are to be used in conjuction, as the data parameter
+ * acts as a dummy object which is going to be duplicated as a new object of the
+ * data member of the list node struct.
+ * The duplicate function is responsible for allocating a new object and 
+ * assigning the values of source to destination.
  * Return values:
  *      [*] On success,  0 is returned
  *      [*] On failure,  -1 is returned
  */
-int dll_insert_at_end(dllistptr list, void* data, void* (*duplicate)(void*))
+int dll_insert_at_back(dllistptr list, void* data, void* (*duplicate)(void*))
 {
     // Safety checks firstly
     // 1. Dllist must be initialized
     if (list == NULL) {
-        fprintf(stderr, "dll_insert_at_end - Error: DLList has not been initialized\n");
+        fprintf(stderr, "dll_insert_at_back - Error: DLList has not been initialized\n");
         return -1;
     }
     // 2. Data must not be NULL
     if (data == NULL) {
-        fprintf(stderr, "dll_insert_at_end - Error: Data given is NULL\n");
+        fprintf(stderr, "dll_insert_at_back - Error: Data given is NULL\n");
         return -1;
     }
     else if (dll_isempty(list)) {
         dllnodeptr elem = malloc(sizeof(struct DoublyLinkedListNode));
         if (elem == NULL) {
-            perror("dll_insert_at_end - Empty list case, error: ");
+            perror("dll_insert_at_back - Empty list case, error: ");
             return -1;
         }
         list->head = elem;
@@ -134,9 +148,9 @@ int dll_insert_at_end(dllistptr list, void* data, void* (*duplicate)(void*))
     else {
         dllnodeptr elem = malloc(sizeof(struct DoublyLinkedListNode));
         if (elem == NULL) {
-            perror("dll_insert_at_end - Error: ");
+            perror("dll_insert_at_back - Error: ");
             return -1;
-        }
+        }       
         (list->tail)->next = elem;
         elem->previous = list->tail;
         list->tail = elem;
@@ -149,10 +163,67 @@ int dll_insert_at_end(dllistptr list, void* data, void* (*duplicate)(void*))
 
 
 /*
+ * Function responsible for inserting an element at the start of the list
+ * The 2nd and 3rd arguments are to be used in conjuction, as the data parameter
+ * acts as a dummy object which is going to be duplicated as a new object of the
+ * data member of the list node struct.
+ * The duplicate function is responsible for allocating a new object and 
+ * assigning the values of source to destination.
+ * Return values:
+ *      [*] On success,  0 is returned
+ *      [*] On failure,  -1 is returned
+ */
+int dll_insert_at_front(dllistptr list, void* data, void* (*duplicate)(void*))
+{
+    // Safety checks firstly
+    // 1. Dllist must be initialized
+    if (list == NULL) {
+        fprintf(stderr, "dll_insert_at_front - Error: DLList has not been initialized\n");
+        return -1;
+    }
+    // 2. Data must not be NULL
+    if (data == NULL) {
+        fprintf(stderr, "dll_insert_at_front - Error: Data given is NULL\n");
+        return -1;
+    }
+    else if (dll_isempty(list)) {
+        dllnodeptr elem = malloc(sizeof(struct DoublyLinkedListNode));
+        if (elem == NULL) {
+            perror("dll_insert_at_front - Empty list case, error: ");
+            return -1;
+        }
+        list->head = elem;
+        list->tail = elem;
+        list->size++;
+        elem->next = NULL;
+        elem->previous = NULL;
+        elem->data = (*duplicate)(data);
+        return 0;
+    }
+    else {
+        dllnodeptr elem = malloc(sizeof(struct DoublyLinkedListNode));
+        if (elem == NULL) {
+            perror("dll_insert_at_front - Error: ");
+            return -1;
+        }
+        (list->head)->previous = elem;
+        elem->next = list->head;
+        list->head = elem;
+        elem->previous = NULL;
+        list->size++;
+        elem->data = (*duplicate)(data);
+        return 0;
+    }
+}
+
+
+/*
  * Function responsible for inserting an element into the list while keeping it
  * sorted by a comparison defined by the user with a function called 
  * issmaller(*). Elements are going to be inserted in ascending order starting 
- * from the head
+ * from the head. 
+ * The 4th argument (duplication function) is explained at the dll_insert_at_end
+ * function.
  * Return values:
  *      [*] On success,  0 is returned
  *      [*] On failure,  -1 is returned
@@ -261,10 +332,129 @@ int dll_insert_sorted(dllistptr list, void* data,
         }
     }
 }
+
+
+/*
+ * Inserts the element `data` before the `key` element provided. If the key is 
+ * not found -1 is returned.
+ * Return values:
+ *      [*]: On success, 0 is returned
+ *      [*]: On error or `on key not found`, -1 is returned
+ */
+int dll_insert_before(dllistptr list, void* data, void* (*duplicate)(void*),
+        void* key, int (*is_equal)(void*, void*)) {
+    // Safety checks firstly
+    // 1. Dllist must be initialized
+    if (list == NULL) {
+        fprintf(stderr, "dll_insert_before - Error: DLList has not been initialized\n");
+        return -1;
+    }
+    // 2. Data must not be NULL
+    if (data == NULL) {
+        fprintf(stderr, "dll_insert_before - Error: Data given is NULL\n");
+        return -1;
+    }
+    // 3. Key must not be NULL
+    if (key == NULL) {
+        fprintf(stderr, "dll_insert_before - Error: Key given is NULL\n");
+        return -1;
+    }
+    //find the element (if it exits)
+    dllnodeptr current = list->head;
+    do {
+        if ( (*is_equal)(key, current->data) ) {
+            //found correct place
+            //add the element before the current node
+            dllnodeptr elem = malloc(sizeof(struct DoublyLinkedListNode));
+            if (elem == NULL) {
+                perror("dll_insert_sorted - Error: ");
+                return -1;
+            }
+            elem->previous = current->previous;
+            elem->next = current;
+            if (current != list->head)
+                (current->previous)->next = elem;
+            else {
+                list->head = elem;
+                elem->previous = NULL;
+            }
+            current->previous = elem;
+            elem->data = (*duplicate)(data);
+            list->size++;
+            return 0;
+        }
+        else {
+            if (current == list->tail)
+                return -1;
+            else
+                current = current->next;
+        }
+    }while(1);
+}
+
+
+/*
+ * Inserts the element `data` after the `key` element provided. If the key is 
+ * not found -1 is returned.
+ * Return values:
+ *      [*]: On success, 0 is returned
+ *      [*]: On error or `on key not found`, -1 is returned
+ */
+int dll_insert_after(dllistptr list, void* data, void* (*duplicate)(void*),
+        void* key, int (*is_equal)(void*, void*)) {
+    // Safety checks firstly
+    // 1. Dllist must be initialized
+    if (list == NULL) {
+        fprintf(stderr, "dll_insert_before - Error: DLList has not been initialized\n");
+        return -1;
+    }
+    // 2. Data must not be NULL
+    if (data == NULL) {
+        fprintf(stderr, "dll_insert_before - Error: Data given is NULL\n");
+        return -1;
+    }
+    // 3. Key must not be NULL
+    if (key == NULL) {
+        fprintf(stderr, "dll_insert_before - Error: Key given is NULL\n");
+        return -1;
+    }
+    //find the element (if it exits)
+    dllnodeptr current = list->head;
+    do {
+        if ( (*is_equal)(key, current->data) ) {
+            //found correct place
+            //add the element after the current node
+            dllnodeptr elem = malloc(sizeof(struct DoublyLinkedListNode));
+            if (elem == NULL) {
+                perror("dll_insert_sorted - Error: ");
+                return -1;
+            }
+            elem->next = current->next;
+            elem->previous = current;
+            if (current != list->tail)
+                (current->next)->previous = elem;
+            else {
+                list->tail = elem;
+                elem->next = NULL;
+            }
+            current->next = elem;
+            elem->data = (*duplicate)(data);
+            list->size++;
+            return 0;
+        }
+        else {
+            if (current == list->tail)
+                return -1;
+            else
+                current = current->next;
+        }
+    }while(1);
+}
+
+
 /*
  * Function that enables accessing data at the list, identified by the 2nd
- * argument, with an is_equal type function as 3rd argument, and as last 
- * parameter a function returning a void pointer to the data of the node
+ * argument, with an is_equal type function as 3rd argument
  * Return values:
  *      [*] On success, the object is returned
  *      [*] On element not found or on error, NULL is returned
@@ -279,7 +469,7 @@ void* dll_get_data(dllistptr list, void* key, int (*is_equal)(void*, void*))
         return NULL;
     }
     else {
-        //find the element (if it exits and delete it)
+        //find the element (if it exits)
         //search method
         dllnodeptr current = list->head;
         do {
@@ -293,6 +483,46 @@ void* dll_get_data(dllistptr list, void* key, int (*is_equal)(void*, void*))
             }
         }while(1);
     }
+}
+
+
+/*
+ * Function that returns a copy of the data located at the front (Head) of 
+ * the list
+ */
+void* dll_get_front(dllistptr list, void* (*duplicate)(void*)) {
+    return (*duplicate)(list->head->data);
+}
+
+
+/*
+ * Function that returns a copy of the data located at the back (Tail) of 
+ * the list
+ */
+void* dll_get_back(dllistptr list, void* (*duplicate)(void*)) {
+    return (*duplicate)(list->tail->data);
+}
+
+
+/*
+ * Function responsible for appending `list b` to `list a`
+ * Upon return, the second list pointer (a.k.a. dllistptr) is going to be freed
+ * and nullified, so that it cannot longer be used
+ */
+void dll_append(dllistptr alist, dllistptr* listptrb)
+{
+    //make the tail of `list a` to point to the `list b` head
+    (alist->tail)->next = (*listptrb)->head;
+    //symmetrically
+    ((*listptrb)->head)->previous = alist->tail;
+    //update `list a` tail
+    alist->tail = (*listptrb)->tail;
+    //free `list b`
+    free(*listptrb);
+    (*listptrb)->head = NULL;
+    (*listptrb)->tail = NULL;
+    (*listptrb)->size = 0;
+    listptrb = NULL;
 }
 
 /*
@@ -370,19 +600,48 @@ int dll_delete(dllistptr list, void* key, int (*is_equal)(void*, void*),
             current = NULL;
         }
         else {
-            //print_int(current->data); putchar('\n');
             (current->previous)->next = current->next;
             (current->next)->previous = current->previous;
             list->size--;
             (*free_data)((void*)current->data);
             free(current);
             current = NULL;
-            //dll_print(list, &print_int);
         }
         return 0;
     }
 }
 
+
+/*
+ * Deletes the tail element of the list
+ */
+void dll_delete_back(dllistptr list, void (*free_data)(void* data)) 
+{
+    dllnodeptr deletion = list->tail;
+    list->tail = (list->tail)->previous;
+    (list->tail)->next = NULL;
+    
+    (*free_data)(deletion->data);
+    deletion->data = NULL;
+    free(deletion);
+    deletion->previous = NULL;
+}
+
+
+/*
+ * Deletes the head element of the list
+ */
+void dll_delete_front(dllistptr list, void (*free_data)(void* data)) 
+{
+    dllnodeptr deletion = list->head;
+    list->head = (list->head)->next;
+    (list->head)->previous = NULL;
+    
+    (*free_data)(deletion->data);
+    deletion->data = NULL;
+    free(deletion);
+    deletion->next = NULL;
+}
 
 
 /*
