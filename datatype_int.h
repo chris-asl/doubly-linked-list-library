@@ -19,12 +19,12 @@ extern "C"
         int datum;
     };
 
-    void print_int(void*);
     Data_int allocate_datatype_int(void);
     void* duplicate_datatype_int(void*);
+    void free_datatype_int(void*);
+    void print_int(void*);
     int issmaller_int(void*, void*);
     int is_equal_int(void*, void*);
-    void free_datatype_int(void*);
 
 #ifdef	__cplusplus
 }
