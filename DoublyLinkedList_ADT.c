@@ -8,7 +8,6 @@
 #include <stdlib.h>
 #include <locale.h>
 #include "DoublyLinkedList_ADT.h"
-#include "datatype_int.h"
 
 
 // Node type definition
