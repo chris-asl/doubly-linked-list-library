@@ -44,7 +44,7 @@ int main(int argc, char** argv) {
     cneg(dll_insert_sorted(list, data, &issmaller_int, &duplicate_datatype_int));
     data->datum = 150;
     cneg(dll_insert_sorted(list, data, &issmaller_int, &duplicate_datatype_int));
-    dll_print(list, &print_int);
+    dll_print(list, &print_int, 0);
     printf("===============================================================\n");
     
     // Adding a new key 
@@ -70,7 +70,7 @@ int main(int argc, char** argv) {
     delthis = allocate_datatype_int();
     delthis->datum = -6;
     dll_delete(list, (void*)delthis, &is_equal_int, &free_datatype_int);
-    dll_print(list, &print_int);
+    dll_print(list, &print_int, 1);
  
     
     // Try and find the element that was deleted
@@ -88,7 +88,7 @@ int main(int argc, char** argv) {
     delthis->datum = 150;
     dll_delete(list, (void*)delthis, &is_equal_int, &free_datatype_int);
     free_datatype_int(delthis);
-    dll_print(list, &print_int);
+    dll_print(list, &print_int, 0);
     printf("===============================================================\n");
     printf("dll_get_front: "); 
     retval = dll_get_front(list, &duplicate_datatype_int);
@@ -107,7 +107,7 @@ int main(int argc, char** argv) {
     cneg(dll_insert_at_back(list, data, &duplicate_datatype_int)); 
     data->datum = 54321;
     cneg(dll_insert_at_front(list, data, &duplicate_datatype_int));
-    dll_print(list, &print_int);
+    dll_print(list, &print_int, 1);
     printf("===============================================================\n");
     //testing insert before/after
     data->datum = 555;
@@ -117,13 +117,13 @@ int main(int argc, char** argv) {
     data->datum = 444;
     cneg(dll_insert_after(list, data, &duplicate_datatype_int, key, &is_equal_int));
     free_datatype_int(key);
-    dll_print(list, &print_int);
+    dll_print(list, &print_int, 0);
     printf("===============================================================\n");
     //testing delete back/front
     dll_delete_front(list, &free_datatype_int);
-    dll_print(list, &print_int);
+    dll_print(list, &print_int, 1);
     dll_delete_back(list, &free_datatype_int);
-    dll_print(list, &print_int);
+    dll_print(list, &print_int, 1);
     printf("===============================================================\n");
     dllistptr blist = NULL;
     cneg(dll_init(&blist));
@@ -133,9 +133,9 @@ int main(int argc, char** argv) {
     cneg(dll_insert_at_back(blist, data, &duplicate_datatype_int));
     data->datum = 1992;
     cneg(dll_insert_at_back(blist, data, &duplicate_datatype_int));
-    dll_print(blist, &print_int);
+    dll_print(blist, &print_int, 1);
     dll_append(list, &blist);
-    dll_print(list, &print_int);
+    dll_print(list, &print_int, 0);
     // Destroy the list    
     dll_destroy(&list, &free_datatype_int);
     return (EXIT_SUCCESS);

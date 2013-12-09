@@ -79,7 +79,8 @@ int dll_isempty(dllistptr list)
  *      [*] On success,  0 is returned
  *      [*] On failure,  -1 is returned
  */
-void dll_print(const dllistptr list, void (*print_data)(void* data))
+void dll_print(const dllistptr list, void (*print_data)(void* data), 
+        int print_inline)
 {
     if (list == NULL) {
         fprintf(stderr, "dll_print - Error: DLList has not been initialized\n");
@@ -94,12 +95,26 @@ void dll_print(const dllistptr list, void (*print_data)(void* data))
         printf("List size: %d\n", list->size);
         dllnodeptr current = list->head;
         while (current != list->tail) {
-            (*print_data)(current->data);
-            printf(" -> ");
+            if (print_inline) {
+                (*print_data)(current->data);
+                printf(" -> ");
+            }
+            else {
+                printf(" -> ");
+                (*print_data)(current->data);
+                putchar('\n');
+                
+            }
             current = current->next;
         }
         //print tail element
-        (*print_data)(current->data);
+        if (print_inline)
+            (*print_data)(current->data);
+        else {
+            printf(" -> ");
+            (*print_data)(current->data);
+        }
+            
         printf("\n====Done printing list====\n");
         return;
     }

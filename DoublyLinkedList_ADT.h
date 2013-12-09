@@ -40,7 +40,7 @@ extern "C"
     *      [*] On success,  0 is returned
     *      [*] On failure,  -1 is returned
     */
-    void dll_print(const dllistptr, void (*print_data )( void* ) );
+    void dll_print(const dllistptr, void (*print_data )( void* ), int);
     /*
      * Function responsible for inserting an element at the end of the list
      * Return values:
