@@ -25,7 +25,7 @@ void* duplicate_datatype_int(void* data)
     if (duplicate == NULL)
         return NULL;
     else {
-        duplicate->datum = ((Data_int)data)->datum;
+        duplicate->num = ((Data_int)data)->num;
         return duplicate;
     }
 }
@@ -40,7 +40,7 @@ void free_datatype_int(void* dataptr)
 
 void print_int(void* data)
 {
-    printf("Data: %d",  ((Data_int)data)->datum  );
+    printf("Data: %d",  ((Data_int)data)->num  );
 }
 
 
@@ -54,8 +54,8 @@ void print_int(void* data)
  */
 int issmaller_int(void* current, void* given)
 {
-    int cur = ((Data_int)current)->datum;
-    int giv = ((Data_int)given)->datum;
+    int cur = ((Data_int)current)->num;
+    int giv = ((Data_int)given)->num;
     if (cur < giv)
         return 1;
     else 
@@ -67,7 +67,7 @@ int is_equal_int(void* vdata, void* vkey)
 {
     Data_int data = (Data_int)vdata;
     Data_int key = (Data_int)vkey;
-    if (data->datum == key->datum)
+    if (data->num == key->num)
         return 1;
     else
         return 0;

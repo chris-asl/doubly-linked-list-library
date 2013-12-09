@@ -16,7 +16,7 @@ extern "C"
     typedef struct Datatype_int *Data_int;
     struct Datatype_int
     {
-        int datum;
+        int num;
     };
 
     Data_int allocate_datatype_int(void);
