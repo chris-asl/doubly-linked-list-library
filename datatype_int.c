@@ -63,11 +63,9 @@ int issmaller_int(void* current, void* given)
 }
 
 
-int is_equal_int(void* vdata, void* vkey)
+int is_equal_int(void* data, void* key)
 {
-    Data_int data = (Data_int)vdata;
-    Data_int key = (Data_int)vkey;
-    if (data->num == key->num)
+    if ( ((Data_int)data)->num == ((Data_int)key)->num)
         return 1;
     else
         return 0;

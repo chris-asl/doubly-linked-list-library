@@ -42,6 +42,7 @@ int dll_init(dllistptr *listptr_addr)
     (*listptr_addr)->head = NULL;
     (*listptr_addr)->tail = NULL;
     (*listptr_addr)->size = 0;
+    return 0;
 }
 
 
