@@ -50,15 +50,9 @@ int main(int argc, char** argv) {
     // Adding a new key 
     Data_int key = NULL;
     key = allocate_datatype_int();
-<<<<<<< HEAD
-    key->datum = 5;
-    // Using a search-like function to get the item with datum == 5
-    Data_int retval = dll_edit_data(list, (void*)key, &is_equal_int);
-=======
     key->num = 5;
     // Using a search-like function to get the item with num == 5
-    Data_int retval = dll_get_data(list, (void*)key, &is_equal_int);
->>>>>>> bd1cb1f989a5dc235e5c337a311f5a2426037403
+    Data_int retval = dll_edit_data(list, (void*)key, &is_equal_int);
     if (retval == NULL)
         printf("Element not found\n");
     else {
@@ -81,13 +75,8 @@ int main(int argc, char** argv) {
     
     // Try and find the element that was deleted
     key = allocate_datatype_int();
-<<<<<<< HEAD
-    key->datum = -6;
-    retval = dll_edit_data(list, (void*)key, &is_equal_int);
-=======
     key->num = -6;
-    retval = dll_get_data(list, (void*)key, &is_equal_int);
->>>>>>> bd1cb1f989a5dc235e5c337a311f5a2426037403
+    retval = dll_edit_data(list, (void*)key, &is_equal_int);
     if (retval == NULL)
         printf("Element not found\n");
     else
