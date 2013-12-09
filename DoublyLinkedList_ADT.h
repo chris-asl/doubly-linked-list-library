@@ -101,7 +101,7 @@ extern "C"
     *      [*] Returns 1, if (1st parameter < 2nd parameter)
     *      [*] Returns 0, if (1st parameter >= 2nd parameter) 
     */
-    void* dll_get_data(dllistptr, void*, int (*)(void*, void*));
+    void* dll_edit_data(dllistptr, void*, int (*)(void*, void*));
     /*
     * Function that returns a copy of the data located at the front (Head) of 
     * the list

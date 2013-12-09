@@ -473,10 +473,10 @@ int dll_insert_after(dllistptr list, void* data, void* (*duplicate)(void*),
  *      [*] On success, the object is returned
  *      [*] On element not found or on error, NULL is returned
  */
-void* dll_get_data(dllistptr list, void* key, int (*is_equal)(void*, void*))
+void* dll_edit_data(dllistptr list, void* key, int (*is_equal)(void*, void*))
 {
     if (list == NULL) {
-        fprintf(stderr, "dll_get_data - Error: DLList has not been initialized\n");
+        fprintf(stderr, "dll_edit_data - Error: DLList has not been initialized\n");
         return NULL;
     }
     if(dll_isempty(list)) {

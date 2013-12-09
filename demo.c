@@ -52,7 +52,7 @@ int main(int argc, char** argv) {
     key = allocate_datatype_int();
     key->datum = 5;
     // Using a search-like function to get the item with datum == 5
-    Data_int retval = dll_get_data(list, (void*)key, &is_equal_int);
+    Data_int retval = dll_edit_data(list, (void*)key, &is_equal_int);
     if (retval == NULL)
         printf("Element not found\n");
     else {
@@ -76,7 +76,7 @@ int main(int argc, char** argv) {
     // Try and find the element that was deleted
     key = allocate_datatype_int();
     key->datum = -6;
-    retval = dll_get_data(list, (void*)key, &is_equal_int);
+    retval = dll_edit_data(list, (void*)key, &is_equal_int);
     if (retval == NULL)
         printf("Element not found\n");
     else
