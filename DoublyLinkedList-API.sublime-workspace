@@ -1,0 +1,715 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"text",
+				"textObj"
+			],
+			[
+				"el",
+				"else"
+			],
+			[
+				"suc",
+				"success"
+			],
+			[
+				"ssh",
+				"ssh_input"
+			],
+			[
+				"linux",
+				"linuxstr"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "main.c",
+			"settings":
+			{
+				"buffer_size": 3312,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "DoublyLinkedList_ADT.c",
+			"settings":
+			{
+				"buffer_size": 13412,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "DoublyLinkedList_ADT.h",
+			"settings":
+			{
+				"buffer_size": 3069,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "data_type.c",
+			"settings":
+			{
+				"buffer_size": 1445,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "datatype_int.h",
+			"settings":
+			{
+				"buffer_size": 543,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 138.0,
+		"selected_items":
+		[
+			[
+				"livereload",
+				"LiveReload: Enable/disable plug-ins"
+			],
+			[
+				"rem",
+				"Package Control: Remove Package"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"remo",
+				"Package Control: Remove Package"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"inst",
+				"Package Control: Install Package"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"remov",
+				"Package Control: Remove Package"
+			],
+			[
+				"enable",
+				"Package Control: Enable Package"
+			]
+		],
+		"width": 602.0
+	},
+	"console":
+	{
+		"height": 139.0,
+		"history":
+		[
+			"import urllib.request,os; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); open(os.path.join(ipp, pf), 'wb').write(urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ','%20')).read()) ",
+			" import urllib.request,os; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); open(os.path.join(ipp, pf), 'wb').write(urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ','%20')).read()) ",
+			"import urllib.request,os; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); open(os.path.join(ipp, pf), 'wb').write(urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ','%20')).read()) "
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/home/chris/Desktop/DIT/Εξάμηνα/ΣΤ' Εξάμηνο/Προγραμματισμός Συστήματος/Assignments/Assignment3/DoublyLinkedList API/main.c",
+		"/home/chris/Desktop/DIT/Εξάμηνα/ΣΤ' Εξάμηνο/Προγραμματισμός Συστήματος/Assignments/Assignment3/DoublyLinkedList_ADT/main.c",
+		"/home/chris/www/my/index.php",
+		"/home/chris/www/my/config.rb",
+		"/home/chris/www/my/contact.php",
+		"/home/chris/www/my/sass/main.scss",
+		"/home/chris/myscripts/ditlog",
+		"/home/chris/myscripts/dropbox-start",
+		"/home/chris/Desktop/dropbox.py",
+		"/media/sda5/project.txt",
+		"/home/chris/www/my/js/main.js",
+		"/home/chris/.config/sublime-text-3/Packages/SideBarEnhancements/CHANGELOG",
+		"/home/chris/.cache/.fr-JO73To/BurnToCD.cmd",
+		"/home/chris/.cache/.fr-2rpXj0/PatchInfo.txt",
+		"/home/chris/.cache/.fr-JXNnar/HBCD.txt",
+		"/home/chris/.cache/.fr-iwqwTX/Patch.cmd",
+		"/tmp/links",
+		"/etc/apt/sources.list.d/noobslab-mint-precise.list",
+		"/home/chris/.bash_profile",
+		"/home/chris/www/my/styles/style.css",
+		"/home/chris/www/my/index.html",
+		"/home/chris/www/index.html",
+		"/home/chris/www/info.php",
+		"/home/chris/Desktop/ADT.desktop",
+		"/home/chris/.local/share/applications/adt.desktop",
+		"/home/chris/.local/share/applications/ada.desktop",
+		"/home/chris/Dropbox/keycode.txt",
+		"/home/chris/Dropbox/pm_sudoer.txt",
+		"/home/chris/Dropbox/bug_reply",
+		"/home/chris/Desktop/evince-3.8.3/shell/main.c",
+		"/home/chris/Desktop/evince-3.8.3/shell/ev-window-title.h",
+		"/home/chris/Desktop/evince-3.8.3/shell/ev-window-title.c",
+		"/home/chris/Desktop/evince-3.8.3/shell/ev-window.h",
+		"/home/chris/Desktop/evince-3.8.3/shell/ev-window.c",
+		"/home/chris/Desktop/evince-3.8.3/previewer/ev-previewer-window.c",
+		"/home/chris/Desktop/evince-3.8.3/properties/ev-properties-main.c",
+		"/home/chris/Desktop/evince-3.8.3/shell/ev-file-monitor.c",
+		"/home/chris/Desktop/evince-3.8.3/shell/ev-application.c",
+		"/home/chris/Desktop/evince-3.8.3/previewer/ev-previewer.c",
+		"/home/chris/Desktop/evince-3.8.3/previewer/ev-previewer-window.h",
+		"/home/chris/Desktop/evince-3.8.3/m4/gtk-doc.m4",
+		"/home/chris/Desktop/evince-3.8.3/libdocument/ev-file-helpers.h",
+		"/home/chris/Desktop/evince-3.8.3/libdocument/ev-document-forms.c",
+		"/home/chris/Desktop/evince-3.8.3/libdocument/ev-document-forms.h",
+		"/home/chris/Desktop/evince-3.8.3/libdocument/ev-document-find.c",
+		"/home/chris/Desktop/evince-3.8.3/data/evince-previewer.desktop.in.in",
+		"/home/chris/Desktop/evince-3.8.3/backend/pdf/ev-poppler.cc",
+		"/home/chris/Desktop/evince-3.8.3/backend/pdf/ev-poppler.h",
+		"/home/chris/Desktop/evince-3.8.3/libview/ev-stock-icons.h",
+		"/home/chris/Desktop/evince-3.8.3/libview/ev-stock-icons.c",
+		"/home/chris/Desktop/evince-3.8.3/libview/ev-view-cursor.c",
+		"/home/chris/Desktop/evince-3.8.3/libview/ev-link-accessible.h",
+		"/home/chris/Desktop/evince-3.8.3/libview/ev-link-accessible.c",
+		"/home/chris/Desktop/DIT/Εξάμηνα/Ε' Εξάμηνο/Βάσεις ΙΙ/OnlineNotes/ExercisesExamples/hw4_answerkey.txt",
+		"/home/chris/www/dbms2/connect_to_db.php",
+		"/home/chris/www/dbms2/get_composers_songs.php",
+		"/etc/fstab",
+		"/home/chris/.mozilla/firefox/4ua9bm0e.default/chrome/userContent.css",
+		"/home/chris/Desktop/DIT/Εξάμηνα/Ε' Εξάμηνο/Γραφικά Ι/Γραφικα 1/´Υλη Γραφικά Ι (2013).txt",
+		"/usr/local/bin/login.sh",
+		"/home/chris/Desktop/Department of Informatics/Εξάμηνα/Ε' Εξάμηνο/Γραφικά Ι/Γραφικα 1/´Υλη Γραφικά Ι (2013).txt",
+		"/usr/local/share/tomate/tomate.py",
+		"/usr/local/bin/tomate",
+		"/home/chris/Dropbox/Links.txt",
+		"/home/chris/Dropbox/Links",
+		"/home/chris/Desktop/Department of Informatics/Εξάμηνα/Ε' Εξάμηνο/Λειτουργικά Συστήματα/mycleaning.sh",
+		"/home/chris/Desktop/Bug Report for light manager.txt",
+		"/home/chris/Dropbox/DIT/Εξάμηνα/Γ' Εξάμηνο/Πιθανότητες και στοιχεία Στατιστικής/Συμβουλές μελέτης και ύλη.txt",
+		"/home/chris/.cache/.fr-Qvxez5/ReadMe.txt",
+		"/home/chris/IdeaProjects/LearningJava/names.txt",
+		"/home/chris/Desktop/names.txt",
+		"/home/chris/IdeaProjects/LearningJava/mywc/src/text",
+		"/home/chris/Desktop/Java/Java from ΤΕΔ/Ergastirio/Frontistirio7&8/ch08cart/src/java/cart/CartServlet.java",
+		"/home/chris/Desktop/Java/Java from ΤΕΔ/Ergastirio/Frontistirio6/ch03email/src/java/data/UserIO.java",
+		"/home/chris/Desktop/Java/Java from ΤΕΔ/Ergastirio/Frontistirio6/ch03email/src/java/email/AddToEmailListServlet.java",
+		"/home/chris/Desktop/Java/Java from ΤΕΔ/Ergastirio/Frontistirio6/ch03email/src/java/business/User.java",
+		"/home/chris/Desktop/Java/Java from ΤΕΔ/Ergastirio/Frontistirio6/ch01servlet/src/java/email/DisplayEmailEntryServlet.java",
+		"/home/chris/Desktop/Java/Java from ΤΕΔ/Ergastirio/src/Exceptions/UsingChainedExceptions.java",
+		"/home/chris/Desktop/Java/Java from ΤΕΔ/Ergastirio/src/Arrays/BarChart.java",
+		"/home/chris/Desktop/Java/Java from ΤΕΔ/Ergastirio/Frontistirio3/src/polymorphism/Employee.java",
+		"/home/chris/Desktop/Java/Java from ΤΕΔ/Ergastirio/Frontistirio3/src/commissionemployeetest/CommissionEmployeeTest.java",
+		"/home/chris/Desktop/Java/Java from ΤΕΔ/Ergastirio/Frontistirio3/src/commissionemployeetest/CommissionEmployee.java",
+		"/home/chris/Desktop/Java/Java from ΤΕΔ/Ergastirio/Frontistirio3/src/commissionemployeetest/BasePlusCommissionEmployee.java",
+		"/home/chris/Desktop/Java/Java from ΤΕΔ/Ergastirio/Frontistirio2/src/Grades/GradeBookTest.java",
+		"/home/chris/Desktop/Java/Java from ΤΕΔ/Ergastirio/Frontistirio2/src/Grades/GradeBook.java",
+		"/home/chris/Desktop/Java/Java from ΤΕΔ/Ergastirio/Frontistirio2/src/bankaccount/BankAccount.java",
+		"/home/chris/.gnome2/nautilus-scripts/Convert image to PNG",
+		"/home/chris/.gnome2/nautilus-scripts/Check md5 sum",
+		"/home/chris/IdeaProjects/LearningJava/output.txt",
+		"/home/chris/IdeaProjects/LearningJava/TextFileOutputDemo(TED)/src/output.txt",
+		"/home/chris/Desktop/digitinput.c",
+		"/home/chris/Desktop/child.c",
+		"/home/chris/Desktop/Department of Informatics/Εξάμηνα/ΣΤ' Εξάμηνο/Προγραμματισμός Συστήματος/Assignments/Assignment2/final/partsAnB/picodb/picodb.c",
+		"/home/chris/Desktop/ditlog.sh"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"dll_delete",
+			"(void *)data)",
+			"data",
+			"element",
+			"text",
+			"containing"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 4,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "main.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3312,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close"
+							],
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "DoublyLinkedList_ADT.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 13412,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close"
+							],
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "DoublyLinkedList_ADT.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3069,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close"
+							],
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "data_type.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1445,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close"
+							],
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "datatype_int.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 543,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close"
+							],
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"project": "DoublyLinkedList-API.sublime-project",
+	"replace":
+	{
+		"height": 42.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
