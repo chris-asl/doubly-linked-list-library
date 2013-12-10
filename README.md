@@ -13,6 +13,7 @@ It is implemented with opaque pointers for abstraction and security.
 5. When you're done with your list, only then you call the *free_datatype* function you've written  
 6. Finally, pass the dllistptr variable to `dll_destroy` function to deallocate the memory needed
 
+**For anything you might need, suggestion, bug report, create a new issue.**
 
 ---
 ###The API provides these functions: ###
