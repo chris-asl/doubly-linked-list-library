@@ -27,7 +27,7 @@ It is implemented with opaque pointers for abstraction and security.
  - insert_sorted
  - insert_before
  - insert_after
- - get_data
+ - edit_data
  - get_front
  - get_back
  - append
