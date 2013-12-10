@@ -102,7 +102,7 @@ struct Datatype_int
       - else, 0 is returned
         
 ---
-###API methods Documentation  
+###API Μethods Documentation  
 1. `int dll_init(dllistptr *listptr_addr)`
     > Initiallizes the Doubly Linked List ADT  
 
