@@ -13,10 +13,7 @@ It is implemented with opaque pointers for abstraction and security.
 5. When you're done with your list, only then you call the *free_datatype* function you've written  
 6. Finally, pass the dllistptr variable to `dll_destroy` function to deallocate the memory needed
 
-<<<<<<< HEAD
 **For anything you might need, suggestion, bug report, create a new issue.**
-=======
->>>>>>> a5466c905a991c20b0180e75b0044274b0149dd5
 
 ---
 ###The API provides these functions: ###
@@ -242,9 +239,4 @@ struct Datatype_int
     **Arguments**  
     @dllptr_addr: Pointer to your list  
     @(\*free_data)(void\*): Pointer to a function for freeing the allocated memory of your type
-<<<<<<< HEAD
-=======
-
-
->>>>>>> a5466c905a991c20b0180e75b0044274b0149dd5
 
