@@ -102,7 +102,7 @@ struct Datatype_int
       - else, 0 is returned
         
 ---
-###API methods Documentation  
+###API Μethods Documentation  
 1. `int dll_init(dllistptr *listptr_addr)`
     > Initiallizes the Doubly Linked List ADT  
 
@@ -176,11 +176,66 @@ struct Datatype_int
 
     Arguments and return values, same as above.
     
-10. `void* dll_get_data(dllistptr list, void* key, int (*is_equal)(void*, void*))`
-    > 
+10. `void* dll_edit_data(dllistptr list, void* data, int (*is_equal)(void*, void*))`
+    > Gives you access to the `data` element in the list. You can prepare the element `data` to contain just a single member (which you want to be the key of the search) and implement the is_equal function to check that member only!
+
+    **Arguments**  
+    @list: Your list  
+    @data: Pointer to a struct (`Data_int`) which is used in a search function as a key  
+    @(\*is_equal)(void\*, void\*): Pointer to a function that is used for finding the element required  
+    **Return values**  
+      - If element is found, its address is returned
+      - If not, NULL is returned
     
+11. `void* dll_get_front(dllistptr list, void* (*duplicate)(void*))`  
+    > Returns the head element of the list  
 
+    **Arguments**
+    @list: Your list   
+    @(*duplicate)(void*): Pointer to a function that returns an exact replica of the `data` object   
+    
+12. `void* dll_get_back(dllistptr list, void* (*duplicate)(void*))`  
+    > Returns the tail element of the list  
 
+    **Arguments**
+    @list: Your list   
+    @(*duplicate)(void*): Pointer to a function that returns an exact replica of the `data` object   
+    
+13. `void dll_append(dllistptr alist, dllistptr* listptrb)`  
+    > Appends list B at the end of list A. Also, listptrb is NULL upon return
+    
+    **Arguments**  
+    @alist: Plain old list   
+    @listptrb: Pointer to a list  
 
----
+14. `int dll_delete(dllistptr list, void* key, int (*is_equal)(void*, void*), void (*free_data)(void*))`  
+    > Deletes the element pointed by the key. Again you can prepare only one member of the key element and write an `is_equal` function that uses only that member  
+
+    **Arguments**  
+    @list: Your list  
+    @key: Element used as a key for the search  
+    @(\*is_equal)(void\*, void\*): Pointer to a function (binary predicate) that checks equality of two elements  
+    @(\*free_data)(void\*): Pointer to a function that deallocates the space allocated by the element
+
+   **Return values**  
+    - On success, 0 is returned
+    - On element not found, 1 is returned
+    - On error, -1 is returned
+    
+15. `void dll_delete_back(dllistptr list, void (*free_data)(void* data))`  
+    > Deletes the tail element of the list
+
+    Arguments are as described above
+
+16. `void dll_delete_front(dllistptr list, void (*free_data)(void* data))`  
+    > Deletes the head element of the list
+
+    Arguments are as described above
+    
+17. `void dll_destroy(dllistptr *dllptr_addr, void (*free_data)(void* data))`  
+    > Deallocates the memory used by the list. Also, upon return dllptr_addr (pointer to your list) is NULL.
+
+    **Arguments**  
+    @dllptr_addr: Pointer to your list  
+    @(\*free_data)(void\*): Pointer to a function for freeing the allocated memory of your type
 
