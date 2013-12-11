@@ -1,3 +1,10 @@
+/*
+ *  Project: Doubly Linked List C-API, example data type
+ *  File:   data_type.c
+ *  Author: Chris Aslanoglou
+ *  Github: https://github.com/chris-asl/doubly-linked-list-API
+ */
+
 #include "datatype_int.h"
 #include <stdlib.h>
 #include <stdio.h>

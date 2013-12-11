@@ -1,8 +1,8 @@
-/* 
- * File:   DoublyLinkedList_ADT.h
- * Author: chris
- *
- * Created on May 18, 2013, 7:26 PM
+/*
+ *  Project: Doubly Linked List C-API, example data type 
+ *  File:   DoublyLinkedList_ADT.h
+ *  Author: Chris Aslanoglou
+ *  Github: https://github.com/chris-asl/doubly-linked-list-API
  */
 
 #ifndef DOUBLYLINKEDLIST_ADT_H
