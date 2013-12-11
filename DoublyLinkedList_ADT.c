@@ -1,6 +1,8 @@
 /*
- *  Project: DoublyLinkedList (Dllist) C API
+ *  Project: Doubly Linked List C-API
+ *  File:   DoublyLinkedList_ADT.c
  *  Author: Chris Aslanoglou
+ *  Github: https://github.com/chris-asl/doubly-linked-list-API
  */
 
 

@@ -1,8 +1,8 @@
 /* 
- * File:   data_type.h
- * Author: chris
- *
- * Created on May 8, 2013, 11:13 AM
+ *  Project: Doubly Linked List C-API, example data type
+ *  File:   data_type.h
+ *  Author: Chris Aslanoglou
+ *  Github: https://github.com/chris-asl/doubly-linked-list-API
  */
 
 #ifndef DATA_TYPE_H

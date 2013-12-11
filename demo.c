@@ -1,8 +1,8 @@
-/* 
- * File:   main.c
- * Author: chris
- *
- * Created on May 17, 2013, 9:13 PM
+/*
+ *  Project: Doubly Linked List C-API, client program example
+ *  File:   demo.c
+ *  Author: Chris Aslanoglou
+ *  Github: https://github.com/chris-asl/doubly-linked-list-API
  */
 
 #include <stdio.h>
@@ -14,27 +14,22 @@
 
 
 int main(int argc, char** argv) {
-    
-    /*
-     *  Another test case: 
-     *      Add the same element twice
-     *      Search for it
-     *      Delete it once
-     *      Search for it
-     *      Delete it once
-     *      Add it again
-     *      Search for it
-     *      Delete
-     *      Search
-     */
     dllistptr list = NULL;
     cneg(dll_init(&list));
     
+
     
     Data_int data;
     // Inserting dummy data
     data = allocate_datatype_int();
     data->num = 5;
+    Data_int retval = dll_edit_data(list, (void*)data, &is_equal_int);
+    if (retval == NULL)
+        printf("Element not found\n");
+    else {
+        printf("Found this element: ");
+        print_int((void*)retval); putchar('\n');
+    }
     cneg(dll_insert_sorted(list, data, &issmaller_int, &duplicate_datatype_int));
     data->num = 2;
     cneg(dll_insert_sorted(list, data, &issmaller_int, &duplicate_datatype_int));
@@ -64,8 +59,7 @@ int main(int argc, char** argv) {
     free_datatype_int((void*)key);
     
     
-    // Creating a num that exists in the list and deleting this item from the
-    // list
+    // Creating a num that exists in the list and deleting this item from the list
     Data_int delthis = NULL;
     delthis = allocate_datatype_int();
     delthis->num = -6;
