@@ -8,6 +8,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <locale.h>
 #include "DoublyLinkedList_ADT.h"
 
@@ -25,6 +26,8 @@ struct DoublyLinkedList_ADT
 {
     dllnodeptr head, tail;
     int size;
+    dllnodeptr *iteratorsArray; 
+    int iteratorsCount;
 };
 
 
@@ -44,6 +47,8 @@ int dll_init(dllistptr *listptr_addr)
     (*listptr_addr)->head = NULL;
     (*listptr_addr)->tail = NULL;
     (*listptr_addr)->size = 0;
+    (*listptr_addr)->iteratorsArray = NULL;
+    (*listptr_addr)->iteratorsCount = 0;
     return 0;
 }
 
@@ -359,7 +364,8 @@ int dll_insert_sorted(dllistptr list, void* data,
  *      [*]: On error or `on key not found`, -1 is returned
  */
 int dll_insert_before(dllistptr list, void* data, void* (*duplicate)(void*),
-        void* key, int (*is_equal)(void*, void*)) {
+        void* key, int (*is_equal)(void*, void*)) 
+{
     // Safety checks firstly
     // 1. Dllist must be initialized
     if (list == NULL) {
@@ -671,6 +677,12 @@ void dll_destroy(dllistptr *dllptr_addr, void (*free_data)(void* data))
         return;
     }
     if(dll_isempty(*dllptr_addr)) {
+        //free iterators, if there are any
+        if ((*dllptr_addr)->iteratorsCount > 0) {
+            free((*dllptr_addr)->iteratorsArray);
+            (*dllptr_addr)->iteratorsArray = (void*)NULL;
+            (*dllptr_addr)->iteratorsCount = 0;
+        }
         //free doubly linked list structure
         free(*dllptr_addr);
         *dllptr_addr = NULL;
@@ -693,6 +705,12 @@ void dll_destroy(dllistptr *dllptr_addr, void (*free_data)(void* data))
             free(to_be_deleted);
             to_be_deleted = NULL;
         }
+        //free iterators, if there are any
+        if ((*dllptr_addr)->iteratorsCount > 0) {
+            free((*dllptr_addr)->iteratorsArray);
+            (*dllptr_addr)->iteratorsArray = (void*)NULL;
+            (*dllptr_addr)->iteratorsCount = 0;
+        }
         //free the doubly linked list structure
         free(*dllptr_addr);
         *dllptr_addr = NULL;
@@ -700,3 +718,152 @@ void dll_destroy(dllistptr *dllptr_addr, void (*free_data)(void* data))
     }
 }
 
+/*
+ *  Function responsible for allocating a new Iterator object
+ *  assigning it to the head of the list and then returning its id 
+ *  Return values:  
+ *      [*] On success, the ID of the Iterator is returned 
+ *      [*] On failure, -1 is returned
+ */
+IteratorID dll_iteratorRequest(dllistptr list)
+{
+    static IteratorID id = 0;
+    list->iteratorsArray = realloc(list->iteratorsArray, (list->iteratorsCount + 1) * sizeof(dllnodeptr));
+    if (list->iteratorsArray == NULL) {
+        perror("dll_requestIterator - Error: Cannot allocate iterator");
+        return -1;
+    }
+    list->iteratorsCount++;
+    // set Iterator to point to the head
+    if (dll_iteratorBegin(list, id) < 0) {
+        fprintf(stderr, "dll_requestIterator - Error: Cannot set iterator to list head\n");
+        return -1;
+    }
+    return id;
+}
+
+/*
+ * Function responsible for bound checking for the array of the iterators
+ * Return values:
+ *      [*] On success, 0 is returned
+ *      [*] On failure, -1 is returned
+ */
+ int dll_iteratorInBounds(dllistptr list, IteratorID iterID)
+ {
+    if (iterID >= list->iteratorsCount){
+        fprintf(stderr, "dll_iteratorBounds - Error: IterID given is out of bounds.\nCurrent iteratorCount: %d\n", list->iteratorsCount);
+        return -1;
+    }
+    return 0;
+ }
+
+/*
+ *  Function responsible for setting the iterator with ID iterID 
+ *  to point to the head of the list
+ *  Return values:
+ *      [*] On success, 0 is returned
+ *      [*] On failure, -1 is returned
+ */
+int dll_iteratorBegin(dllistptr list, IteratorID iterID)
+{
+    // check if the iterID is within bounds
+    if (dll_iteratorInBounds(list, iterID) < 0)
+        return -1;
+    list->iteratorsArray[iterID] = list->head;
+    return 0;
+}
+
+/*
+ *  Function responsible for setting the iterator with ID iterID 
+ *  to point to the tail of the list
+ *  Return values:
+ *      [*] On success, 0 is returned
+ *      [*] On failure, -1 is returned
+ */
+int dll_iteratorEnd(dllistptr list, IteratorID iterID)
+{
+    // check if the iterID is within bounds
+    if (dll_iteratorInBounds(list, iterID) < 0)
+        return -1;
+    list->iteratorsArray[iterID] = list->tail;
+    return 0;
+}
+
+/*
+ *  Function responsible for returning the Object into the node
+ *  pointed by the iterator
+ *  Return values:
+ *      [*] On success, the object is returned
+ *      [*] On failure, NULL is returned
+ */
+ const void* dll_iteratorGetObj(dllistptr list, IteratorID iterID)
+ {
+    //check if the iterID is within bounds
+    if (dll_iteratorInBounds(list, iterID) < 0)
+        return NULL;
+    return (const void*) list->iteratorsArray[iterID]->data;
+ }
+
+/*
+ *  Function responsible for setting the iterator to the next node
+ *  If by advancing, the iterator is requested to point after the tail
+ *  of the list, 1 is returned
+ *  Return values:
+ *      [*] On success, 0 is returned
+ *      [*] On failure, -1 is returned
+ *      [*] On the case described above, 1 is returned
+ */
+ int dll_iteratorNext(dllistptr list, IteratorID iterID)
+ {
+    if (dll_iteratorInBounds(list, iterID) < 0)
+        return -1;
+    // check the case of calling this function on a iterator that points to the
+    // tail of the list
+    if (list->iteratorsArray[iterID] == list->tail) {
+        return 1;
+    }
+    list->iteratorsArray[iterID] = list->iteratorsArray[iterID]->next;
+    return 0;
+ }
+
+ /*
+ *  Function responsible for setting the iterator to the previous node
+ *  If by requesting the previous node, the iterator points before the head
+ *  of the list, 1 is returned
+ *  Return values:
+ *      [*] On success, 0 is returned
+ *      [*] On failure, -1 is returned
+ *      [*] On the case described above, 1 is returned
+ */
+ int dll_iteratorPrev(dllistptr list, IteratorID iterID)
+ {
+    if (dll_iteratorInBounds(list, iterID) < 0)
+        return -1;
+    // check the case of calling this function on a iterator that points to the
+    // head of the list
+    if (list->iteratorsArray[iterID] == list->head) {
+        return 1;
+    }
+    list->iteratorsArray[iterID] = list->iteratorsArray[iterID]->previous;
+    return 0;
+ }
+
+/*
+ *  Function responsible for deleting the iterator pointed by iterID
+ *  Return values:
+ *      [*] On success, 0 is returned
+ *      [*] On failure, -1 is returned
+ */
+int dll_iteratorDelete(dllistptr list, IteratorID iterID)
+{
+    if (dll_iteratorInBounds(list, iterID) < 0)
+        return -1;
+    list->iteratorsCount--;
+    memmove(list->iteratorsArray + iterID, list->iteratorsArray + iterID + 1, list->iteratorsCount - iterID);
+    list->iteratorsArray = realloc(list->iteratorsArray, list->iteratorsCount * sizeof(dllnodeptr));
+    if (list->iteratorsArray == NULL) {
+        fprintf(stderr, "dll_iteratorDelete - Error: Error decreasing the size of the iterators array\n");
+        return -1;
+    }
+    return 0;
+}

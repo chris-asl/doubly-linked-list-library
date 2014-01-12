@@ -47,7 +47,7 @@ int main(int argc, char** argv) {
     key = allocate_datatype_int();
     key->num = 5;
     // Using a search-like function to get the item with num == 5
-    Data_int retval = dll_edit_data(list, (void*)key, &is_equal_int);
+    retval = dll_edit_data(list, (void*)key, &is_equal_int);
     if (retval == NULL)
         printf("Element not found\n");
     else {
@@ -130,8 +130,77 @@ int main(int argc, char** argv) {
     dll_print(blist, &print_int, 1);
     dll_append(list, &blist);
     dll_print(list, &print_int, 0);
+
+    // iterators testing
+    IteratorID iter = dll_iteratorRequest(list);
+    if (iter < 0) {
+        dll_destroy(&list, &free_datatype_int);
+        return -1;
+    }
+    printf("Clients can implement their own print\n");
+    printf("List contents (from head to tail): \n");
+    Data_int temp = NULL;
+    do {
+        printf("\t");
+        temp = dll_iteratorGetObj(list, iter);
+        if (temp != NULL)
+            print_int(temp);
+        putchar('\n');
+        int ret = dll_iteratorNext(list, iter);
+        if (ret == -1) {
+            fprintf(stderr, "Error printing my list\n");
+            dll_destroy(&list, &free_datatype_int);
+            return -1;
+        }
+        else if (ret == 1) //end of list
+            break;
+    }while(1);
+    printf("List contents (from tail to head): \n");
+    temp = NULL;
+    IteratorID iter2 = dll_iteratorRequest(list);
+    dll_iteratorEnd(list,iter2);
+    do {
+        printf("\t");
+        temp = dll_iteratorGetObj(list, iter2);
+        if (temp != NULL)
+            print_int(temp);
+        putchar('\n');
+        int ret = dll_iteratorPrev(list, iter2);
+        if (ret == -1) {
+            fprintf(stderr, "Error printing my list\n");
+            dll_destroy(&list, &free_datatype_int);
+            return -1;
+        }
+        else if (ret == 1) //end of list
+            break;
+    }while(1);
+    //test delete iterator
+    dll_iteratorDelete(list, iter2);
+    //test using the deleted
+    dll_iteratorEnd(list, iter2);
+    //test using the remaining one
+    printf("List contents (from head to tail): \n");
+    temp = NULL;
+    dll_iteratorBegin(list, iter);
+    do {
+        printf("\t");
+        temp = dll_iteratorGetObj(list, iter);
+        if (temp != NULL)
+            print_int(temp);
+        putchar('\n');
+        int ret = dll_iteratorNext(list, iter);
+        if (ret == -1) {
+            fprintf(stderr, "Error printing my list\n");
+            dll_destroy(&list, &free_datatype_int);
+            return -1;
+        }
+        else if (ret == 1) //end of list
+            break;
+    }while(1);
+    printf("\n\nDone\n");
     // Destroy the list    
     dll_destroy(&list, &free_datatype_int);
+    free_datatype_int(data);
     return (EXIT_SUCCESS);
 }
 

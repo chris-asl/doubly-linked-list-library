@@ -14,6 +14,7 @@ extern "C"
 #endif
     
     typedef struct DoublyLinkedList_ADT *dllistptr;
+    typedef int IteratorID; 
 
     /*
      * Function responsible for initializing the Doubly Linked List ADT
@@ -141,6 +142,72 @@ extern "C"
      * Function responsible for freeing all the allocated memory
      */
     void dll_destroy(dllistptr*, void (*)(void*));
+    /*
+     *  Function responsible for allocating a new Iterator object
+     *  assigning it to the head of the list and then returning its id 
+     *  Return values:  
+     *      [*] On success, the ID of the Iterator is returned 
+     *      [*] On failure, -1 is returned
+     */
+    IteratorID dll_iteratorRequest(dllistptr);
+    /*
+     * Function responsible for bound checking for the array of the iterators
+     * Return values:
+     *      [*] On success, 0 is returned
+     *      [*] On failure, -1 is returned
+     */
+     int dll_iteratorInBounds(dllistptr, IteratorID);
+     /*
+     *  Function responsible for setting the iterator with ID iterID 
+     *  to point to the head of the list
+     *  Return values:
+     *      [*] On success, 0 is returned
+     *      [*] On failure, -1 is returned
+     */
+    int dll_iteratorBegin(dllistptr, IteratorID);
+    /*
+     *  Function responsible for setting the iterator with ID iterID 
+     *  to point to the tail of the list
+     *  Return values:
+     *      [*] On success, 0 is returned
+     *      [*] On failure, -1 is returned
+     */
+    int dll_iteratorEnd(dllistptr, IteratorID);
+    /*
+     *  Function responsible for returning the Object into the node
+     *  pointed by the iterator
+     *  Return values:
+     *      [*] On success, the object is returned
+     *      [*] On failure, NULL is returned
+     */
+     const void* dll_iteratorGetObj(dllistptr, IteratorID);
+     /*
+     *  Function responsible for setting the iterator to the next node
+     *  If by advancing, the iterator is requested to point after the tail
+     *  of the list, 1 is returned
+     *  Return values:
+     *      [*] On success, 0 is returned
+     *      [*] On failure, -1 is returned
+     *      [*] On the case described above, 1 is returned
+     */
+     int dll_iteratorNext(dllistptr, IteratorID);
+      /*
+     *  Function responsible for setting the iterator to the previous node
+     *  If by requesting the previous node, the iterator points before the head
+     *  of the list, 1 is returned
+     *  Return values:
+     *      [*] On success, 0 is returned
+     *      [*] On failure, -1 is returned
+     *      [*] On the case described above, 1 is returned
+     */
+     int dll_iteratorPrev(dllistptr, IteratorID);
+     /*
+     *  Function responsible for deleting the iterator pointed by iterID
+     *  Return values:
+     *      [*] On success, 0 is returned
+     *      [*] On failure, -1 is returned
+     */
+    int dll_iteratorDelete(dllistptr, IteratorID);
 
 
 #ifdef	__cplusplus
