@@ -850,20 +850,22 @@ int dll_iteratorEnd(dllistptr list, IteratorID iterID)
 
 /*
  *  Function responsible for deleting the iterator pointed by iterID
+ *  and then invalidating the iterID
  *  Return values:
  *      [*] On success, 0 is returned
  *      [*] On failure, -1 is returned
  */
-int dll_iteratorDelete(dllistptr list, IteratorID iterID)
+int dll_iteratorDelete(dllistptr list, IteratorID* iterID)
 {
-    if (dll_iteratorInBounds(list, iterID) < 0)
+    if (dll_iteratorInBounds(list, *iterID) < 0)
         return -1;
     list->iteratorsCount--;
-    memmove(list->iteratorsArray + iterID, list->iteratorsArray + iterID + 1, list->iteratorsCount - iterID);
+    memmove(list->iteratorsArray + *iterID, list->iteratorsArray + *iterID + 1, list->iteratorsCount - *iterID);
     list->iteratorsArray = realloc(list->iteratorsArray, list->iteratorsCount * sizeof(dllnodeptr));
     if (list->iteratorsArray == NULL) {
         fprintf(stderr, "dll_iteratorDelete - Error: Error decreasing the size of the iterators array\n");
         return -1;
     }
+    *iterID = -1;
     return 0;
 }
