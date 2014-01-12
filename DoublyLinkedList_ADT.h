@@ -180,7 +180,7 @@ extern "C"
      *      [*] On success, the object is returned
      *      [*] On failure, NULL is returned
      */
-     const void* dll_iteratorGetObj(dllistptr, IteratorID);
+     void* dll_iteratorGetObj(dllistptr, IteratorID);
      /*
      *  Function responsible for setting the iterator to the next node
      *  If by advancing, the iterator is requested to point after the tail

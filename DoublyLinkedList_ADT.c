@@ -541,10 +541,10 @@ void dll_append(dllistptr alist, dllistptr* listptrb)
     //update `list a` tail
     alist->tail = (*listptrb)->tail;
     //free `list b`
-    free(*listptrb);
     (*listptrb)->head = NULL;
     (*listptrb)->tail = NULL;
     (*listptrb)->size = 0;
+    free(*listptrb);
     listptrb = NULL;
 }
 
@@ -646,8 +646,9 @@ void dll_delete_back(dllistptr list, void (*free_data)(void* data))
     
     (*free_data)(deletion->data);
     deletion->data = NULL;
-    free(deletion);
     deletion->previous = NULL;
+    free(deletion);
+    deletion = NULL;
 }
 
 
@@ -662,8 +663,9 @@ void dll_delete_front(dllistptr list, void (*free_data)(void* data))
     
     (*free_data)(deletion->data);
     deletion->data = NULL;
-    free(deletion);
     deletion->next = NULL;
+    free(deletion);
+    deletion = NULL;
 }
 
 
@@ -739,7 +741,7 @@ IteratorID dll_iteratorRequest(dllistptr list)
         fprintf(stderr, "dll_requestIterator - Error: Cannot set iterator to list head\n");
         return -1;
     }
-    return id;
+    return id++;
 }
 
 /*
@@ -750,7 +752,7 @@ IteratorID dll_iteratorRequest(dllistptr list)
  */
  int dll_iteratorInBounds(dllistptr list, IteratorID iterID)
  {
-    if (iterID >= list->iteratorsCount){
+    if (iterID > list->iteratorsCount){
         fprintf(stderr, "dll_iteratorBounds - Error: IterID given is out of bounds.\nCurrent iteratorCount: %d\n", list->iteratorsCount);
         return -1;
     }
@@ -769,7 +771,7 @@ int dll_iteratorBegin(dllistptr list, IteratorID iterID)
     // check if the iterID is within bounds
     if (dll_iteratorInBounds(list, iterID) < 0)
         return -1;
-    list->iteratorsArray[iterID] = list->head;
+    list->iteratorsArray[iterID - list->iteratorsCount] = list->head;
     return 0;
 }
 
@@ -785,7 +787,7 @@ int dll_iteratorEnd(dllistptr list, IteratorID iterID)
     // check if the iterID is within bounds
     if (dll_iteratorInBounds(list, iterID) < 0)
         return -1;
-    list->iteratorsArray[iterID] = list->tail;
+    (list->iteratorsArray)[iterID] = list->tail;
     return 0;
 }
 
@@ -796,12 +798,12 @@ int dll_iteratorEnd(dllistptr list, IteratorID iterID)
  *      [*] On success, the object is returned
  *      [*] On failure, NULL is returned
  */
- const void* dll_iteratorGetObj(dllistptr list, IteratorID iterID)
+ void* dll_iteratorGetObj(dllistptr list, IteratorID iterID)
  {
     //check if the iterID is within bounds
     if (dll_iteratorInBounds(list, iterID) < 0)
         return NULL;
-    return (const void*) list->iteratorsArray[iterID]->data;
+    return list->iteratorsArray[iterID]->data;
  }
 
 /*
@@ -847,6 +849,8 @@ int dll_iteratorEnd(dllistptr list, IteratorID iterID)
     list->iteratorsArray[iterID] = list->iteratorsArray[iterID]->previous;
     return 0;
  }
+ 
+// int dll_deleteIter
 
 /*
  *  Function responsible for deleting the iterator pointed by iterID
@@ -860,12 +864,16 @@ int dll_iteratorDelete(dllistptr list, IteratorID* iterID)
     if (dll_iteratorInBounds(list, *iterID) < 0)
         return -1;
     list->iteratorsCount--;
-    memmove(list->iteratorsArray + *iterID, list->iteratorsArray + *iterID + 1, list->iteratorsCount - *iterID);
-    list->iteratorsArray = realloc(list->iteratorsArray, list->iteratorsCount * sizeof(dllnodeptr));
-    if (list->iteratorsArray == NULL) {
-        fprintf(stderr, "dll_iteratorDelete - Error: Error decreasing the size of the iterators array\n");
+    memmove(list->iteratorsArray + *iterID, list->iteratorsArray + *iterID + 1, list->iteratorsCount - *iterID); ///!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 3o arg
+    void* tmp = realloc(list->iteratorsArray, list->iteratorsCount * sizeof(dllnodeptr));
+    if (tmp == NULL) {
+        //error with realloc
+        fprintf(stderr, "dll_iteratorDelete - Error: Failed to delete iterator with ID == %d\n", *iterID);
+        *iterID = -1;
         return -1;
     }
+    else
+        list->iteratorsArray = tmp;  
     *iterID = -1;
     return 0;
 }
