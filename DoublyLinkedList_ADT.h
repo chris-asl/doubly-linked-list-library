@@ -207,7 +207,7 @@ extern "C"
      *      [*] On success, 0 is returned
      *      [*] On failure, -1 is returned
      */
-    int dll_iteratorDelete(dllistptr, IteratorID*);
+    int dll_iteratorDelete(dllistptr, IteratorID);
 
 
 #ifdef	__cplusplus

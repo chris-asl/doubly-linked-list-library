@@ -175,7 +175,7 @@ int main(int argc, char** argv) {
             break;
     }while(1);
     //test delete iterator
-    dll_iteratorDelete(list, &iter2);
+    dll_iteratorDelete(list, iter2);
     //test using the deleted
     dll_iteratorEnd(list, iter2);
     //test using the remaining one

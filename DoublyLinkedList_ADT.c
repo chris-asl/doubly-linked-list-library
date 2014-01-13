@@ -21,12 +21,20 @@ struct DoublyLinkedListNode
     void* data;
 };
 
+// Iterator type definition
+typedef struct DoublyLinkedListIterator dlliterator;
+struct DoublyLinkedListIterator 
+{
+    dllnodeptr node;
+    IteratorID id;
+};
+
 // DLL ADT definition
 struct DoublyLinkedList_ADT
 {
     dllnodeptr head, tail;
     int size;
-    dllnodeptr *iteratorsArray; 
+    dlliterator *iteratorsArray; 
     int iteratorsCount;
 };
 
@@ -729,12 +737,15 @@ void dll_destroy(dllistptr *dllptr_addr, void (*free_data)(void* data))
  */
 IteratorID dll_iteratorRequest(dllistptr list)
 {
-    static IteratorID id = 0;
-    list->iteratorsArray = realloc(list->iteratorsArray, (list->iteratorsCount + 1) * sizeof(dllnodeptr));
-    if (list->iteratorsArray == NULL) {
+    static IteratorID id = 1;
+    void* tmp = realloc(list->iteratorsArray, (list->iteratorsCount + 1) * sizeof(dlliterator));
+    if (tmp == NULL) {
         perror("dll_requestIterator - Error: Cannot allocate iterator");
         return -1;
     }
+    else
+        list->iteratorsArray = tmp;
+    (list->iteratorsArray[list->iteratorsCount]).id = id;
     list->iteratorsCount++;
     // set Iterator to point to the head
     if (dll_iteratorBegin(list, id) < 0) {
@@ -744,19 +755,21 @@ IteratorID dll_iteratorRequest(dllistptr list)
     return id++;
 }
 
-/*
- * Function responsible for bound checking for the array of the iterators
- * Return values:
- *      [*] On success, 0 is returned
- *      [*] On failure, -1 is returned
- */
- int dll_iteratorInBounds(dllistptr list, IteratorID iterID)
+ /*
+  * Given an IteratorID this function returns the index of the array
+  * in which the Iterator is located (currently using linear search)
+  * Return values:
+  *     [*] On success, the index is returned
+  *     [*] On element not found, -1 is returned
+  */
+ int dll_iteratorGetIdx(dllistptr list, IteratorID iterID)
  {
-    if (iterID > list->iteratorsCount){
-        fprintf(stderr, "dll_iteratorBounds - Error: IterID given is out of bounds.\nCurrent iteratorCount: %d\n", list->iteratorsCount);
-        return -1;
+    int idx;
+    for (idx = 0; idx < list->iteratorsCount; idx++) {
+        if ((list->iteratorsArray[idx]).id == iterID)
+            return idx;
     }
-    return 0;
+    return -1;
  }
 
 /*
@@ -768,10 +781,14 @@ IteratorID dll_iteratorRequest(dllistptr list)
  */
 int dll_iteratorBegin(dllistptr list, IteratorID iterID)
 {
-    // check if the iterID is within bounds
-    if (dll_iteratorInBounds(list, iterID) < 0)
+    // find iterator's idx
+    int idx = dll_iteratorGetIdx(list, iterID);
+    if (idx == -1) {
+        fprintf(stderr, "dll_iteratorBegin - Error: "
+                "Iterator with ID == %d wasn't found\n", iterID);
         return -1;
-    list->iteratorsArray[iterID - list->iteratorsCount] = list->head;
+    }
+    (list->iteratorsArray[idx]).node = list->head;
     return 0;
 }
 
@@ -784,10 +801,14 @@ int dll_iteratorBegin(dllistptr list, IteratorID iterID)
  */
 int dll_iteratorEnd(dllistptr list, IteratorID iterID)
 {
-    // check if the iterID is within bounds
-    if (dll_iteratorInBounds(list, iterID) < 0)
+    // find iterator's idx
+    int idx = dll_iteratorGetIdx(list, iterID);
+    if (idx == -1) {
+        fprintf(stderr, "dll_iteratorEnd - Error: "
+                "Iterator with ID == %d wasn't found\n", iterID);
         return -1;
-    (list->iteratorsArray)[iterID] = list->tail;
+    }
+    (list->iteratorsArray[idx]).node = list->tail;
     return 0;
 }
 
@@ -800,10 +821,14 @@ int dll_iteratorEnd(dllistptr list, IteratorID iterID)
  */
  void* dll_iteratorGetObj(dllistptr list, IteratorID iterID)
  {
-    //check if the iterID is within bounds
-    if (dll_iteratorInBounds(list, iterID) < 0)
+    // find iterator's idx
+    int idx = dll_iteratorGetIdx(list, iterID);
+    if (idx == -1) {
+        fprintf(stderr, "dll_iteratorGetObj - Error: "
+                "Iterator with ID == %d wasn't found\n", iterID);
         return NULL;
-    return list->iteratorsArray[iterID]->data;
+    }
+    return (list->iteratorsArray[idx]).node->data;
  }
 
 /*
@@ -817,14 +842,19 @@ int dll_iteratorEnd(dllistptr list, IteratorID iterID)
  */
  int dll_iteratorNext(dllistptr list, IteratorID iterID)
  {
-    if (dll_iteratorInBounds(list, iterID) < 0)
+    // find iterator's idx
+    int idx = dll_iteratorGetIdx(list, iterID);
+    if (idx == -1) {
+        fprintf(stderr, "dll_iteratorNext - Error: "
+                "Iterator with ID == %d wasn't found\n", iterID);
         return -1;
+    }
     // check the case of calling this function on a iterator that points to the
     // tail of the list
-    if (list->iteratorsArray[iterID] == list->tail) {
+    if ((list->iteratorsArray[idx]).node == list->tail) {
         return 1;
     }
-    list->iteratorsArray[iterID] = list->iteratorsArray[iterID]->next;
+    (list->iteratorsArray[idx]).node = (list->iteratorsArray[idx]).node->next;
     return 0;
  }
 
@@ -839,14 +869,19 @@ int dll_iteratorEnd(dllistptr list, IteratorID iterID)
  */
  int dll_iteratorPrev(dllistptr list, IteratorID iterID)
  {
-    if (dll_iteratorInBounds(list, iterID) < 0)
+    // find iterator's idx
+    int idx = dll_iteratorGetIdx(list, iterID);
+    if (idx == -1) {
+        fprintf(stderr, "dll_iteratorPrev - Error: "
+                "Iterator with ID == %d wasn't found\n", iterID);
         return -1;
+    }
     // check the case of calling this function on a iterator that points to the
     // head of the list
-    if (list->iteratorsArray[iterID] == list->head) {
+    if (list->iteratorsArray[idx].node == list->head) {
         return 1;
     }
-    list->iteratorsArray[iterID] = list->iteratorsArray[iterID]->previous;
+    (list->iteratorsArray[idx]).node = (list->iteratorsArray[idx]).node->previous;
     return 0;
  }
  
@@ -859,21 +894,38 @@ int dll_iteratorEnd(dllistptr list, IteratorID iterID)
  *      [*] On success, 0 is returned
  *      [*] On failure, -1 is returned
  */
-int dll_iteratorDelete(dllistptr list, IteratorID* iterID)
+int dll_iteratorDelete(dllistptr list, IteratorID iterID)
 {
-    if (dll_iteratorInBounds(list, *iterID) < 0)
+    // find iterator's idx
+    int idx = dll_iteratorGetIdx(list, iterID);
+    if (idx == -1) {
+        fprintf(stderr, "dll_iteratorDelete - Error: "
+                "Iterator with ID == %d wasn't found\n", iterID);
         return -1;
+    }
     list->iteratorsCount--;
-    memmove(list->iteratorsArray + *iterID, list->iteratorsArray + *iterID + 1, list->iteratorsCount - *iterID); ///!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 3o arg
-    void* tmp = realloc(list->iteratorsArray, list->iteratorsCount * sizeof(dllnodeptr));
+    //keep a backup of the iterator marked for removal, in case realloc fails
+    dlliterator backup;
+    backup.id = idx;
+    backup.node = (list->iteratorsArray[idx]).node;
+    memmove(&(list->iteratorsArray[idx]), &(list->iteratorsArray[idx+1]), 
+    (list->iteratorsCount - idx)*sizeof(dlliterator));
+    void* tmp = realloc(list->iteratorsArray, list->iteratorsCount * sizeof(dlliterator));
     if (tmp == NULL) {
         //error with realloc
-        fprintf(stderr, "dll_iteratorDelete - Error: Failed to delete iterator with ID == %d\n", *iterID);
-        *iterID = -1;
+        fprintf(stderr, "dll_iteratorDelete - Error: Failed to delete iterator with ID == %d\n", iterID);
+        //undo memmove
+        memmove(&(list->iteratorsArray[idx+1]), &(list->iteratorsArray[idx]), 
+                (list->iteratorsCount - idx)*sizeof(dlliterator));
+        //restore backup
+        (list->iteratorsArray[idx]).id = backup.id;
+        (list->iteratorsArray[idx]).node = backup.node;
+        //restore counter
+        list->iteratorsCount++;
         return -1;
     }
     else
         list->iteratorsArray = tmp;  
-    *iterID = -1;
+    iterID = -1;
     return 0;
 }
