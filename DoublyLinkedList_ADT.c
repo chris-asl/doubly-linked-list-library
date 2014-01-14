@@ -38,6 +38,15 @@ struct DoublyLinkedList_ADT
     int iteratorsCount;
 };
 
+// Forward declaration of non API functions
+/*
+ * Function responsible for taking two dllnodeptr acting as old and new
+ * finding all the iterators that point to old and updating them to point
+ * to the new node
+ * If the list is empty, it will delete all iterators
+ * Note: Will not used by the user
+ */  
+void dll_iteratorUpdate(dllistptr, dllnodeptr, dllnodeptr);
 
 /*
  * Function responsible for initializing the Doubly Linked List ADT
@@ -522,6 +531,18 @@ void* dll_edit_data(dllistptr list, void* data, int (*is_equal)(void*, void*))
  * the list
  */
 void* dll_get_front(dllistptr list, void* (*duplicate)(void*)) {
+    // check if list is null
+    if (list == NULL) {
+        fprintf(stderr, "dll_get_front - Error: DLList has not been initialized\n");
+        return NULL;
+    }
+    if(dll_isempty(list)) {
+        fprintf(stderr, "dll_get_front - Error: DLList is empty\n"
+                "\tDeleting all iterators now...\n");
+        // invalidate - delete all iterators
+        dll_iteratorDeleteAll(list);
+        return NULL;
+    }
     return (*duplicate)(list->head->data);
 }
 
@@ -531,6 +552,18 @@ void* dll_get_front(dllistptr list, void* (*duplicate)(void*)) {
  * the list
  */
 void* dll_get_back(dllistptr list, void* (*duplicate)(void*)) {
+    // check if list is null
+    if (list == NULL) {
+        fprintf(stderr, "dll_get_back - Error: DLList has not been initialized\n");
+        return NULL;
+    }
+    if(dll_isempty(list)) {
+        fprintf(stderr, "dll_get_back - Error: DLList is empty\n"
+                "\tDeleting all iterators now...\n");
+        // invalidate - delete all iterators
+        dll_iteratorDeleteAll(list);
+        return NULL;
+    }
     return (*duplicate)(list->tail->data);
 }
 
@@ -605,35 +638,41 @@ int dll_delete(dllistptr list, void* key, int (*is_equal)(void*, void*),
         else if (current == list->head) {
             if (current != list->tail) {
                 //first node doesn't have previous
+                list->size--;
+                dll_iteratorUpdate(list, current, current->next);
                 (current->next)->previous = NULL;
                 list->head = current->next;
-                list->size--;
                 (*free_data)((void*) current->data);
                 free(current);
                 current = NULL;
             }
             else {
+                //case in which we are deleting the one and only 
+                //element of the list
                 list->head = NULL;
                 list->tail = NULL;
                 list->size--;
                 (*free_data)((void*) current->data);
                 free(current);
                 current = NULL;
+                dll_iteratorUpdate(list, NULL, NULL);
             }
         }
         else if (current == list->tail) {
+            list->size--;
+            dll_iteratorUpdate(list, current, current->previous);
             list->tail = current->previous;
             //last node doesn't have next
             (current->previous)->next = NULL;
-            list->size--;
             (*free_data)((void*)current->data);
             free(current);
             current = NULL;
         }
         else {
+            list->size--;
+            dll_iteratorUpdate(list, current, current->next);
             (current->previous)->next = current->next;
             (current->next)->previous = current->previous;
-            list->size--;
             (*free_data)((void*)current->data);
             free(current);
             current = NULL;
@@ -648,7 +687,11 @@ int dll_delete(dllistptr list, void* key, int (*is_equal)(void*, void*),
  */
 void dll_delete_back(dllistptr list, void (*free_data)(void* data)) 
 {
+    list->size--;
     dllnodeptr deletion = list->tail;
+    //take care of iterators that point to tail, so as to point to the new tail
+    //element of the list
+    dll_iteratorUpdate(list, deletion, deletion->previous);
     list->tail = (list->tail)->previous;
     (list->tail)->next = NULL;
     
@@ -665,7 +708,11 @@ void dll_delete_back(dllistptr list, void (*free_data)(void* data))
  */
 void dll_delete_front(dllistptr list, void (*free_data)(void* data)) 
 {
+    list->size--;
     dllnodeptr deletion = list->head;
+    //take care of iterators that point to head, so as they point to the next
+    //element (new head) of the list
+    dll_iteratorUpdate(list, deletion, deletion->next);
     list->head = (list->head)->next;
     (list->head)->previous = NULL;
     
@@ -688,11 +735,7 @@ void dll_destroy(dllistptr *dllptr_addr, void (*free_data)(void* data))
     }
     if(dll_isempty(*dllptr_addr)) {
         //free iterators, if there are any
-        if ((*dllptr_addr)->iteratorsCount > 0) {
-            free((*dllptr_addr)->iteratorsArray);
-            (*dllptr_addr)->iteratorsArray = (void*)NULL;
-            (*dllptr_addr)->iteratorsCount = 0;
-        }
+        dll_iteratorDeleteAll(*dllptr_addr);
         //free doubly linked list structure
         free(*dllptr_addr);
         *dllptr_addr = NULL;
@@ -715,12 +758,9 @@ void dll_destroy(dllistptr *dllptr_addr, void (*free_data)(void* data))
             free(to_be_deleted);
             to_be_deleted = NULL;
         }
+        (*dllptr_addr)->size = 0;
         //free iterators, if there are any
-        if ((*dllptr_addr)->iteratorsCount > 0) {
-            free((*dllptr_addr)->iteratorsArray);
-            (*dllptr_addr)->iteratorsArray = (void*)NULL;
-            (*dllptr_addr)->iteratorsCount = 0;
-        }
+        dll_iteratorDeleteAll(*dllptr_addr);
         //free the doubly linked list structure
         free(*dllptr_addr);
         *dllptr_addr = NULL;
@@ -737,6 +777,19 @@ void dll_destroy(dllistptr *dllptr_addr, void (*free_data)(void* data))
  */
 IteratorID dll_iteratorRequest(dllistptr list)
 {
+    // check if list is null
+    if (list == NULL) {
+        fprintf(stderr, "dll_iteratorRequest - Error: DLList has not been initialized\n");
+        return -1;
+    }
+    // provide iterator only if list isn't empty
+    if(dll_isempty(list)) {
+        fprintf(stderr, "dll_iteratorRequest - Error: DLList is empty\n"
+                "\tDeleting all iterators now...\n");
+        // invalidate - delete all iterators
+        dll_iteratorDeleteAll(list);
+        return 1;
+    }
     static IteratorID id = 1;
     void* tmp = realloc(list->iteratorsArray, (list->iteratorsCount + 1) * sizeof(dlliterator));
     if (tmp == NULL) {
@@ -762,7 +815,7 @@ IteratorID dll_iteratorRequest(dllistptr list)
   *     [*] On success, the index is returned
   *     [*] On element not found, -1 is returned
   */
- int dll_iteratorGetIdx(dllistptr list, IteratorID iterID)
+ int dll_iteratorGetIdxWithID(dllistptr list, IteratorID iterID)
  {
     int idx;
     for (idx = 0; idx < list->iteratorsCount; idx++) {
@@ -771,18 +824,70 @@ IteratorID dll_iteratorRequest(dllistptr list)
     }
     return -1;
  }
-
+ 
+ /*
+  * Given a dllnodeptr this function returns the index of the array
+  * in which the Iterator is located (currently using linear search)
+  * Return values:
+  *     [*] On success, the index is returned
+  *     [*] On element not found, -1 is returned
+  */
+ int dll_iteratorGetIdxWithPtr(dllistptr list, dllnodeptr node)
+ {
+    int idx;
+    for (idx = 0; idx < list->iteratorsCount; idx++) {
+        if ((list->iteratorsArray[idx]).node == node)
+            return idx;
+    }
+    return -1;
+ }
+ 
+ /*
+  * Function responsible for taking two dllnodeptr acting as old and new
+  * finding all the iterators that point to old and updating them to point
+  * to the new node
+  * If the list is empty, it will delete all iterators
+  * Note: Will not used by the user
+  */    
+ void dll_iteratorUpdate(dllistptr list, dllnodeptr old, dllnodeptr new)
+ {
+    if (dll_isempty(list))
+        dll_iteratorDeleteAll(list);
+    else {
+        int idx;
+        for (idx = 0; idx < list->iteratorsCount; idx++) {
+            if ((list->iteratorsArray[idx]).node == old)
+                (list->iteratorsArray[idx]).node = new;
+        }
+    }
+ }
+ 
+ 
 /*
  *  Function responsible for setting the iterator with ID iterID 
  *  to point to the head of the list
  *  Return values:
  *      [*] On success, 0 is returned
  *      [*] On failure, -1 is returned
+ *      [*] On empty list, 1 is returned to indicate invalidation of iterators
  */
 int dll_iteratorBegin(dllistptr list, IteratorID iterID)
 {
+    // check if list is null
+    if (list == NULL) {
+        fprintf(stderr, "dll_iteratorBegin - Error: DLList has not been initialized\n");
+        return -1;
+    }
+    // provide iterator only if list isn't empty
+    if(dll_isempty(list)) {
+        fprintf(stderr, "dll_iteratorBegin - Error: DLList is empty\n"
+                "\tDeleting all iterators now...\n");
+        // invalidate - delete all iterators
+        dll_iteratorDeleteAll(list);
+        return 1;
+    }
     // find iterator's idx
-    int idx = dll_iteratorGetIdx(list, iterID);
+    int idx = dll_iteratorGetIdxWithID(list, iterID);
     if (idx == -1) {
         fprintf(stderr, "dll_iteratorBegin - Error: "
                 "Iterator with ID == %d wasn't found\n", iterID);
@@ -798,11 +903,25 @@ int dll_iteratorBegin(dllistptr list, IteratorID iterID)
  *  Return values:
  *      [*] On success, 0 is returned
  *      [*] On failure, -1 is returned
+ *      [*] On empty list, 1 is returned to indicate invalidation of iterators
  */
 int dll_iteratorEnd(dllistptr list, IteratorID iterID)
 {
+    // check if list is null
+    if (list == NULL) {
+        fprintf(stderr, "dll_iteratorEnd - Error: DLList has not been initialized\n");
+        return -1;
+    }
+    // provide iterator only if list isn't empty
+    if(dll_isempty(list)) {
+        fprintf(stderr, "dll_iteratorEnd - Error: DLList is empty\n"
+                "\tDeleting all iterators now...\n");
+        // invalidate - delete all iterators
+        dll_iteratorDeleteAll(list);
+        return 1;
+    }
     // find iterator's idx
-    int idx = dll_iteratorGetIdx(list, iterID);
+    int idx = dll_iteratorGetIdxWithID(list, iterID);
     if (idx == -1) {
         fprintf(stderr, "dll_iteratorEnd - Error: "
                 "Iterator with ID == %d wasn't found\n", iterID);
@@ -821,8 +940,21 @@ int dll_iteratorEnd(dllistptr list, IteratorID iterID)
  */
  void* dll_iteratorGetObj(dllistptr list, IteratorID iterID)
  {
+     // check if list is null
+    if (list == NULL) {
+        fprintf(stderr, "dll_iteratorGetObj - Error: DLList has not been initialized\n");
+        return NULL;
+    }
+    // provide iterator only if list isn't empty
+    if(dll_isempty(list)) {
+        fprintf(stderr, "dll_iteratorGetObj - Error: DLList is empty\n"
+                "\tDeleting all iterators now...\n");
+        // invalidate - delete all iterators
+        dll_iteratorDeleteAll(list);
+        return NULL;
+    }
     // find iterator's idx
-    int idx = dll_iteratorGetIdx(list, iterID);
+    int idx = dll_iteratorGetIdxWithID(list, iterID);
     if (idx == -1) {
         fprintf(stderr, "dll_iteratorGetObj - Error: "
                 "Iterator with ID == %d wasn't found\n", iterID);
@@ -838,12 +970,26 @@ int dll_iteratorEnd(dllistptr list, IteratorID iterID)
  *  Return values:
  *      [*] On success, 0 is returned
  *      [*] On failure, -1 is returned
- *      [*] On the case described above, 1 is returned
+ *      [*] On empty list, 1 is returned to indicate invalidation of iterators
+ *      [*] On the case described above, 2 is returned
  */
  int dll_iteratorNext(dllistptr list, IteratorID iterID)
  {
+     // check if list is null
+    if (list == NULL) {
+        fprintf(stderr, "dll_iteratorNext - Error: DLList has not been initialized\n");
+        return -1;
+    }
+    // provide iterator only if list isn't empty
+    if(dll_isempty(list)) {
+        fprintf(stderr, "dll_iteratorNext - Error: DLList is empty\n"
+                "\tDeleting all iterators now...\n");
+        // invalidate - delete all iterators
+        dll_iteratorDeleteAll(list);
+        return 1;
+    }
     // find iterator's idx
-    int idx = dll_iteratorGetIdx(list, iterID);
+    int idx = dll_iteratorGetIdxWithID(list, iterID);
     if (idx == -1) {
         fprintf(stderr, "dll_iteratorNext - Error: "
                 "Iterator with ID == %d wasn't found\n", iterID);
@@ -852,7 +998,7 @@ int dll_iteratorEnd(dllistptr list, IteratorID iterID)
     // check the case of calling this function on a iterator that points to the
     // tail of the list
     if ((list->iteratorsArray[idx]).node == list->tail) {
-        return 1;
+        return 2;
     }
     (list->iteratorsArray[idx]).node = (list->iteratorsArray[idx]).node->next;
     return 0;
@@ -865,12 +1011,26 @@ int dll_iteratorEnd(dllistptr list, IteratorID iterID)
  *  Return values:
  *      [*] On success, 0 is returned
  *      [*] On failure, -1 is returned
- *      [*] On the case described above, 1 is returned
+ *      [*] On empty list, 1 is returned to indicate invalidation of iterators
+ *      [*] On the case described above, 2 is returned
  */
  int dll_iteratorPrev(dllistptr list, IteratorID iterID)
  {
+     // check if list is null
+    if (list == NULL) {
+        fprintf(stderr, "dll_iteratorRequest - Error: DLList has not been initialized\n");
+        return -1;
+    }
+    // provide iterator only if list isn't empty
+    if(dll_isempty(list)) {
+        fprintf(stderr, "dll_iteratorRequest - Error: DLList is empty\n"
+                "\tDeleting all iterators now...\n");
+        // invalidate - delete all iterators
+        dll_iteratorDeleteAll(list);
+        return 1;
+    }
     // find iterator's idx
-    int idx = dll_iteratorGetIdx(list, iterID);
+    int idx = dll_iteratorGetIdxWithID(list, iterID);
     if (idx == -1) {
         fprintf(stderr, "dll_iteratorPrev - Error: "
                 "Iterator with ID == %d wasn't found\n", iterID);
@@ -879,13 +1039,102 @@ int dll_iteratorEnd(dllistptr list, IteratorID iterID)
     // check the case of calling this function on a iterator that points to the
     // head of the list
     if (list->iteratorsArray[idx].node == list->head) {
-        return 1;
+        return 2;
     }
     (list->iteratorsArray[idx]).node = (list->iteratorsArray[idx]).node->previous;
     return 0;
  }
  
-// int dll_deleteIter
+ /*
+  * Function responsible for deleting the current node pointed by the iterator
+  * After the deletion the iterator points to the next element of the list
+  * (towards the end). If the element to be destroyed is the last element of the
+  * list, which means that the list will be empty, all the iterators are 
+  * invalidated
+  * Return values:
+  *         [*] On success, 0 is returned
+  *         [*] On failure, -1 is returned
+  *         [*] On empty list, 1 is returned to indicate invalidation of 
+  *             iterators
+  */
+int dll_iteratorDeleteCurrentNode(dllistptr list, IteratorID iterID,
+        void (*free_data)(void*))
+{
+    // check if list is null or empty
+    if (list == NULL) {
+        fprintf(stderr, "dll_iteratorDeleteCurrentNode - Error: DLList has not been initialized\n");
+        return -1;
+    }
+    if(dll_isempty(list)) {
+        fprintf(stderr, "dll_iteratorDeleteCurrentNode - Error: DLList is empty\n"
+                "\tDeleting all iterators now...\n");
+        // invalidate - delete all iterators
+        dll_iteratorDeleteAll(list);
+        return 1;
+    }
+    // find iterator's idx
+    int idx = dll_iteratorGetIdxWithID(list, iterID);
+    if (idx == -1) {
+        fprintf(stderr, "dll_iteratorDeleteCurrentNode - Error: "
+                "Iterator with ID == %d wasn't found\n", iterID);
+        return -1;
+    }
+    //set current node
+    dllnodeptr current = (list->iteratorsArray[idx]).node;
+    //set iterator to the next element (towards the end of the list)
+    int setIteratorToEnd = 0;
+    if (dll_iteratorNext(list, iterID) == 2) {
+        //current node is tail node, hence dll_iteratorNext returned 2
+        //Setting the iterator to the end of the list, must occur after 
+        //the deletion
+        setIteratorToEnd = 1;
+    }
+    //implement delete
+    if (current == list->head) {
+            if (current != list->tail) {
+                //first node doesn't have previous
+                (current->next)->previous = NULL;
+                list->head = current->next;
+                list->size--;
+                (*free_data)((void*) current->data);
+                free(current);
+                current = NULL;
+            }
+            else {
+                list->head = NULL;
+                list->tail = NULL;
+                list->size--;
+                (*free_data)((void*) current->data);
+                free(current);
+                current = NULL;
+            }
+        }
+        else if (current == list->tail) {
+            list->tail = current->previous;
+            //last node doesn't have next
+            (current->previous)->next = NULL;
+            list->size--;
+            (*free_data)((void*)current->data);
+            free(current);
+            current = NULL;
+            if (setIteratorToEnd) {
+                if (dll_iteratorEnd(list, iterID) < 0) {
+                    fprintf(stderr, "dll_iteratorDeleteCurrentNode - Error:"
+                            "Could not set iterator to the end of the list\n");
+                    return -1;
+                }
+            }
+        }
+        else {
+            (current->previous)->next = current->next;
+            (current->next)->previous = current->previous;
+            list->size--;
+            (*free_data)((void*)current->data);
+            free(current);
+            current = NULL;
+        }
+    return 0;
+}
 
 /*
  *  Function responsible for deleting the iterator pointed by iterID
@@ -896,8 +1145,19 @@ int dll_iteratorEnd(dllistptr list, IteratorID iterID)
  */
 int dll_iteratorDelete(dllistptr list, IteratorID iterID)
 {
+    // firstly check if list is null or empty
+     if (list == NULL) {
+        fprintf(stderr, "dll_iteratorDelete - Error: DLList has not been initialized\n");
+        return -1;
+    }
+    if(dll_isempty(list)) {
+        fprintf(stderr, "dll_iteratorDelete - Error: DLList is empty\n");
+        //in that case, no iterators should exist
+        dll_iteratorDeleteAll(list);
+        return -1;
+    }
     // find iterator's idx
-    int idx = dll_iteratorGetIdx(list, iterID);
+    int idx = dll_iteratorGetIdxWithID(list, iterID);
     if (idx == -1) {
         fprintf(stderr, "dll_iteratorDelete - Error: "
                 "Iterator with ID == %d wasn't found\n", iterID);
@@ -908,10 +1168,11 @@ int dll_iteratorDelete(dllistptr list, IteratorID iterID)
     dlliterator backup;
     backup.id = idx;
     backup.node = (list->iteratorsArray[idx]).node;
+    // Watch case in which the number of iterators after delete is 0
     memmove(&(list->iteratorsArray[idx]), &(list->iteratorsArray[idx+1]), 
     (list->iteratorsCount - idx)*sizeof(dlliterator));
     void* tmp = realloc(list->iteratorsArray, list->iteratorsCount * sizeof(dlliterator));
-    if (tmp == NULL) {
+    if ((tmp == NULL) && (list->iteratorsCount != 0)) {
         //error with realloc
         fprintf(stderr, "dll_iteratorDelete - Error: Failed to delete iterator with ID == %d\n", iterID);
         //undo memmove
@@ -929,3 +1190,25 @@ int dll_iteratorDelete(dllistptr list, IteratorID iterID)
     iterID = -1;
     return 0;
 }
+
+/*
+ *  Function responsible for deleting all iterators 
+ *  Return values:
+ *      [*] On success, 0 is returned
+ *      [*] On failure, -1 is returned
+ */
+int dll_iteratorDeleteAll(dllistptr list)
+{
+    //firstly check if list is null
+    if (list == NULL) {
+        fprintf(stderr, "dll_iteratorDeleteAll - Error: DLList has not been initialized\n");
+        return -1;
+    }
+    if (list->iteratorsCount > 0) {
+        free(list->iteratorsArray);
+        list->iteratorsArray = (void*) NULL;
+        list->iteratorsCount = 0;
+    }
+    return 0;
+}
+
