@@ -104,14 +104,16 @@ extern "C" {
     void* dll_edit_data(dllistptr, void*, int (*)(void*, void*));
     /*
      * Function that returns a copy of the data located at the front (Head) of 
-     * the list
+     * the list, if getCopy option is true, or the actual data if the option is
+     * set to 0 (false)
      */
-    void* dll_get_front(dllistptr, void* (*)(void*));
+    const void* dll_get_front(dllistptr, void* (*)(void*), int);
     /*
      * Function that returns a copy of the data located at the back (Tail) of 
-     * the list
+     * the list, if getCopy option is true, or the actual data if the option is
+     * set to 0 (false)
      */
-    void* dll_get_back(dllistptr, void* (*)(void*));
+    const void* dll_get_back(dllistptr, void* (*)(void*), int);
     /*
      * Function responsible for appending `list b` to `list a`
      * Upon return, the second list pointer (a.k.a. dllistptr) is going to be freed

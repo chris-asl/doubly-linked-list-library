@@ -528,9 +528,11 @@ void* dll_edit_data(dllistptr list, void* data, int (*is_equal)(void*, void*))
 
 /*
  * Function that returns a copy of the data located at the front (Head) of 
- * the list
+ * the list, if getCopy option is true, or the actual data if the option is
+ * set to 0 (false)
  */
-void* dll_get_front(dllistptr list, void* (*duplicate)(void*)) {
+const void* dll_get_front(dllistptr list, void* (*duplicate)(void*),
+        int getCopy) {
     // check if list is null
     if (list == NULL) {
         fprintf(stderr, "dll_get_front - Error: DLList has not been initialized\n");
@@ -543,15 +545,20 @@ void* dll_get_front(dllistptr list, void* (*duplicate)(void*)) {
         dll_iteratorDeleteAll(list);
         return NULL;
     }
-    return (*duplicate)(list->head->data);
+    if (getCopy)
+        return (*duplicate)(list->head->data);
+    else
+        return list->head->data;
 }
 
 
 /*
  * Function that returns a copy of the data located at the back (Tail) of 
- * the list
+ * the list, if getCopy option is true, or the actual data if the option is
+ * set to 0 (false)
  */
-void* dll_get_back(dllistptr list, void* (*duplicate)(void*)) {
+const void* dll_get_back(dllistptr list, void* (*duplicate)(void*), 
+        int getCopy) {
     // check if list is null
     if (list == NULL) {
         fprintf(stderr, "dll_get_back - Error: DLList has not been initialized\n");
@@ -564,7 +571,10 @@ void* dll_get_back(dllistptr list, void* (*duplicate)(void*)) {
         dll_iteratorDeleteAll(list);
         return NULL;
     }
-    return (*duplicate)(list->tail->data);
+    if (getCopy)
+        return (*duplicate)(list->head->data);
+    else
+        return list->head->data;
 }
 
 

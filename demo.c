@@ -137,12 +137,12 @@ int main(int argc, char** argv) {
     dll_print(list, &print_int, 0);
     printf("===============================================================\n");
     printf("dll_get_front: "); 
-    retval = dll_get_front(list, &duplicate_datatype_int);
+    retval = dll_get_front(list, &duplicate_datatype_int, 1);
     print_int(retval);
     free_datatype_int(retval);
     putchar('\n');
     printf("dll_get_back: "); 
-    retval = dll_get_back(list, &duplicate_datatype_int);
+    retval = dll_get_back(list, &duplicate_datatype_int, 1);
     print_int(retval);
     free_datatype_int(retval);
     retval = NULL;
