@@ -1,4 +1,4 @@
-d/*
+/*
  *  Project: Doubly Linked List C-API
  *  File:   DoublyLinkedList_ADT.c
  *  Author: Chris Aslanoglou
