@@ -199,7 +199,9 @@ extern "C" {
      *  Return values:
      *      [*] On success, 0 is returned
      *      [*] On failure, -1 is returned
-     *      [*] On the case described above, 1 is returned
+     *      [*] On empty list, 1 is returned to indicate invalidation of 
+     *          iterators
+     *      [*] On the case described above, 2 is returned
      */
     int dll_iteratorPrev(dllistptr, IteratorID);
     /*
@@ -213,6 +215,7 @@ extern "C" {
      *         [*] On failure, -1 is returned
      *         [*] On empty list, 1 is returned to indicate invalidation of 
      *             iterators
+     *         [*] On the case described above, 2 is returned
      */
     int dll_iteratorDeleteCurrentNode(dllistptr, IteratorID, void (*)(void*));
     /*

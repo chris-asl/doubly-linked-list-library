@@ -1,4 +1,4 @@
-/*
+d/*
  *  Project: Doubly Linked List C-API
  *  File:   DoublyLinkedList_ADT.c
  *  Author: Chris Aslanoglou
@@ -699,17 +699,31 @@ void dll_delete_back(dllistptr list, void (*free_data)(void* data))
 {
     list->size--;
     dllnodeptr deletion = list->tail;
-    //take care of iterators that point to tail, so as to point to the new tail
-    //element of the list
-    dll_iteratorUpdate(list, deletion, deletion->previous);
-    list->tail = (list->tail)->previous;
-    (list->tail)->next = NULL;
-    
-    (*free_data)(deletion->data);
-    deletion->data = NULL;
-    deletion->previous = NULL;
-    free(deletion);
-    deletion = NULL;
+    if (list->size > 0) {
+        //take care of iterators that point to tail, so as to point to the new tail
+        //element of the list
+        dll_iteratorUpdate(list, deletion, deletion->previous);
+        list->tail = (list->tail)->previous;
+        (list->tail)->next = NULL;
+
+        (*free_data)(deletion->data);
+        deletion->data = NULL;
+        deletion->previous = NULL;
+        free(deletion);
+        deletion = NULL;
+    }
+    else {
+        // list is empty
+        // invalidate - delete all iterators
+        dll_iteratorDeleteAll(list);
+        list->head = NULL;
+        list->tail = NULL;
+        (*free_data)(deletion->data);
+        deletion->data = NULL;
+        deletion->next = NULL;
+        free(deletion);
+        deletion = NULL;
+    }
 }
 
 
@@ -720,17 +734,31 @@ void dll_delete_front(dllistptr list, void (*free_data)(void* data))
 {
     list->size--;
     dllnodeptr deletion = list->head;
-    //take care of iterators that point to head, so as they point to the next
-    //element (new head) of the list
-    dll_iteratorUpdate(list, deletion, deletion->next);
-    list->head = (list->head)->next;
-    (list->head)->previous = NULL;
-    
-    (*free_data)(deletion->data);
-    deletion->data = NULL;
-    deletion->next = NULL;
-    free(deletion);
-    deletion = NULL;
+    if (list->size > 0) {
+        //take care of iterators that point to head, so as they point to the next
+        //element (new head) of the list
+        dll_iteratorUpdate(list, deletion, deletion->next);
+        list->head = (list->head)->next;
+        (list->head)->previous = NULL;
+
+        (*free_data)(deletion->data);
+        deletion->data = NULL;
+        deletion->next = NULL;
+        free(deletion);
+        deletion = NULL;
+    }
+    else {
+        // list is empty
+        // invalidate - delete all iterators
+        dll_iteratorDeleteAll(list);
+        list->head = NULL;
+        list->tail = NULL;
+        (*free_data)(deletion->data);
+        deletion->data = NULL;
+        deletion->next = NULL;
+        free(deletion);
+        deletion = NULL;
+    }
 }
 
 
