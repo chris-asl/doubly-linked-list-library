@@ -152,13 +152,6 @@ extern "C" {
      */
     IteratorID dll_iteratorRequest(dllistptr);
     /*
-     * Function responsible for bound checking for the array of the iterators
-     * Return values:
-     *      [*] On success, 0 is returned
-     *      [*] On failure, -1 is returned
-     */
-    int dll_iteratorInBounds(dllistptr, IteratorID);
-    /*
      *  Function responsible for setting the iterator with ID iterID 
      *  to point to the head of the list
      *  Return values:
@@ -204,6 +197,22 @@ extern "C" {
      *      [*] On the case described above, 2 is returned
      */
     int dll_iteratorPrev(dllistptr, IteratorID);
+    /*
+     * Function that acts both as a copy constructor and copy function
+     * When you need copy constructor functionality, dest IteratorID must be 
+     * NULL, and this function will allocate a new iterator setting it 
+     * to point to the node that src Iterator points
+     * When you need simple copy functionality, the function will copy the
+     * address of the node that src Iterator points to the node of dest Iterator 
+     * Return values:
+     *      [*] On success, 0 is returned
+     *      [*] On failure, -1 is returned
+     *      [*] On empty list, 1 is returned to indicate the invalidation of the
+     *          iterators
+     *      [*] On iteratorIdxOutOfBounds error, 2 is returned
+     * 
+     */
+    int dll_iteratorCopy(dllistptr, const IteratorID, IteratorID*);
     /*
      * Function responsible for deleting the current node pointed by the iterator
      * After the deletion the iterator points to the next element of the list

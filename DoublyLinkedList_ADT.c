@@ -47,6 +47,22 @@ struct DoublyLinkedList_ADT
  * Note: Will not used by the user
  */  
 void dll_iteratorUpdate(dllistptr, dllnodeptr, dllnodeptr);
+/*
+  * Given an IteratorID this function returns the index of the array
+  * in which the Iterator is located (currently using linear search)
+  * Return values:
+  *     [*] On success, the index is returned
+  *     [*] On element not found, -1 is returned
+  */
+ int dll_iteratorGetIdxWithID(dllistptr, IteratorID);
+ /*
+  * Given a dllnodeptr this function returns the index of the array
+  * in which the Iterator is located (currently using linear search)
+  * Return values:
+  *     [*] On success, the index is returned
+  *     [*] On element not found, -1 is returned
+  */
+ int dll_iteratorGetIdxWithPtr(dllistptr, dllnodeptr);
 
 /*
  * Function responsible for initializing the Doubly Linked List ADT
@@ -846,13 +862,7 @@ IteratorID dll_iteratorRequest(dllistptr list)
     return id++;
 }
 
- /*
-  * Given an IteratorID this function returns the index of the array
-  * in which the Iterator is located (currently using linear search)
-  * Return values:
-  *     [*] On success, the index is returned
-  *     [*] On element not found, -1 is returned
-  */
+
  int dll_iteratorGetIdxWithID(dllistptr list, IteratorID iterID)
  {
     int idx;
@@ -863,13 +873,7 @@ IteratorID dll_iteratorRequest(dllistptr list)
     return -1;
  }
  
- /*
-  * Given a dllnodeptr this function returns the index of the array
-  * in which the Iterator is located (currently using linear search)
-  * Return values:
-  *     [*] On success, the index is returned
-  *     [*] On element not found, -1 is returned
-  */
+
  int dll_iteratorGetIdxWithPtr(dllistptr list, dllnodeptr node)
  {
     int idx;
@@ -1081,7 +1085,72 @@ int dll_iteratorEnd(dllistptr list, IteratorID iterID)
     }
     (list->iteratorsArray[idx]).node = (list->iteratorsArray[idx]).node->previous;
     return 0;
- }
+}
+
+/*
+ * Function that acts both as a copy constructor and copy function
+ * When you need copy constructor functionality, dest IteratorID must be 
+ * NULL, and this function will allocate a new iterator setting it 
+ * to point to the node that src Iterator points
+ * When you need simple copy functionality, the function will copy the
+ * address of the node that src Iterator points to the node of dest Iterator 
+ * Return values:
+ *      [*] On success, 0 is returned
+ *      [*] On failure, -1 is returned
+ *      [*] On empty list, 1 is returned to indicate the invalidation of the
+ *          iterators
+ *      [*] On iteratorIdxOutOfBounds error, 2 is returned
+ * 
+ */
+int dll_iteratorCopy(dllistptr list, const IteratorID src, IteratorID *dest) 
+{
+    // check if list is null or empty
+    if (list == NULL) {
+        fprintf(stderr, "dll_iteratorCopy - Error: DLList has not been initialized\n");
+        return -1;
+    }
+    if(dll_isempty(list)) {
+        fprintf(stderr, "dll_iteratorCopy - Error: DLList is empty\n"
+                "\tDeleting all iterators now...\n");
+        // invalidate - delete all iterators
+        dll_iteratorDeleteAll(list);
+        return 1;
+    }
+    // check if src iterator is valid
+    int srcIdx = dll_iteratorGetIdxWithID(list, src);
+    if (srcIdx == -1) {
+        fprintf(stderr, "dll_iteratorCopy - Error: Source iterator doesn't exist\n");
+        return 2;
+    }
+    // check which functionality is needed
+    if (*dest == -1) {
+        // copy constructor functionality
+        *dest = dll_iteratorRequest(list);
+        if (*dest == -1) {
+            fprintf(stderr, "dll_iteratorCopy - Error: Could not allocate dest"
+            "iterator\n");
+            return -1;
+        }
+        // set dest iterator node to point to src iterator node
+        int destIdx = dll_iteratorGetIdxWithID(list, *dest);
+        (list->iteratorsArray[destIdx]).node = 
+                (list->iteratorsArray[srcIdx]).node;
+        return 0;
+    }
+    else {
+        // simple copy functionality 
+        // set dest iterator node to point to src iterator node
+        int destIdx = dll_iteratorGetIdxWithID(list, *dest);
+        if (destIdx == -1) {
+            fprintf(stderr, "dll_iteratorCopy - Error: Destination iterator"
+                    " doesn't exist\n");
+            return -1;
+        }
+        (list->iteratorsArray[destIdx]).node = 
+                (list->iteratorsArray[srcIdx]).node;
+        return 0;
+    }
+}
  
  /*
   * Function responsible for deleting the current node pointed by the iterator

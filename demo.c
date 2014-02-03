@@ -209,8 +209,10 @@ int main(int argc, char** argv) {
     }while(1);
     printf("List contents (from tail to head): \n");
     temp = NULL;
-    IteratorID iter2 = dll_iteratorRequest(list);
-    dll_iteratorEnd(list,iter2);
+//    IteratorID iter2 = dll_iteratorRequest(list);
+//    dll_iteratorEnd(list,iter2);
+    IteratorID iter2 = -1;
+    dll_iteratorCopy(list, iter, &iter2);
     do {
         printf("\t");
         temp = dll_iteratorGetObj(list, iter2);
@@ -229,6 +231,7 @@ int main(int argc, char** argv) {
     //test delete iterator
     dll_iteratorDelete(list, iter2);
     //test using the deleted
+    printf("______Next print must be an error\n");
     dll_iteratorEnd(list, iter2);
     //test using the remaining one
     printf("List contents (from head to tail): \n");
