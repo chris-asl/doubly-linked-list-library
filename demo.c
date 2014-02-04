@@ -7,10 +7,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <locale.h>
 #include "DoublyLinkedList_ADT.h"
 #include "datatype_int.h"
 
 #define cneg(r) if(r == -1){return -1;}
+#define chneg(r,s) if(r < 0) { fprintf(stderr,s); return -1;}
 
 
 int main(int argc, char** argv) {
@@ -61,7 +63,6 @@ int main(int argc, char** argv) {
     if (returned) {
         printf("\t\t\t");print_int(returned); printf("\n");
     }
-    //try deleting all elements
     printf("===============================================================\n");
     printf("Testing invalidation of iterator\n");
     // simple test of setting to Begin
@@ -189,6 +190,15 @@ int main(int argc, char** argv) {
         dll_destroy(&list, &free_datatype_int);
         return -1;
     }
+    IteratorID iter2 = dll_iteratorRequest(list);
+    dll_iteratorEnd(list,iter2);
+    IteratorID iter3 = dll_iteratorRequest(list);
+    dll_iteratorDeleteAll(list);
+    iter = dll_iteratorRequest(list);
+    if (iter < 0) {
+        dll_destroy(&list, &free_datatype_int);
+        return -1;
+    }
     printf("Clients can implement their own print\n");
     printf("List contents (from head to tail): \n");
     Data_int temp = NULL;
@@ -209,17 +219,16 @@ int main(int argc, char** argv) {
     }while(1);
     printf("List contents (from tail to head): \n");
     temp = NULL;
-//    IteratorID iter2 = dll_iteratorRequest(list);
-//    dll_iteratorEnd(list,iter2);
-    IteratorID iter2 = -1;
-    dll_iteratorCopy(list, iter, &iter2);
+    
+//    IteratorID iter2 = -1;
+//    dll_iteratorCopy(list, iter, &iter2);
     do {
         printf("\t");
-        temp = dll_iteratorGetObj(list, iter2);
+        temp = dll_iteratorGetObj(list, iter);
         if (temp != NULL)
             print_int(temp);
         putchar('\n');
-        int ret = dll_iteratorPrev(list, iter2);
+        int ret = dll_iteratorPrev(list, iter);
         if (ret == -1) {
             fprintf(stderr, "Error printing my list\n");
             dll_destroy(&list, &free_datatype_int);
@@ -233,7 +242,14 @@ int main(int argc, char** argv) {
     //test using the deleted
     printf("______Next print must be an error\n");
     dll_iteratorEnd(list, iter2);
-    //test using the remaining one
+    // test DeleteAllIterators
+    dll_iteratorDeleteAll(list);
+    
+    iter = dll_iteratorRequest(list);
+    if (iter < 0) {
+        dll_destroy(&list, &free_datatype_int);
+        return -1;
+    }
     printf("List contents (from head to tail): \n");
     temp = NULL;
     dll_iteratorBegin(list, iter);
@@ -253,11 +269,18 @@ int main(int argc, char** argv) {
             break;
     }while(1);
     printf("\n\nDone\n");
-    
+    // testing copy list
+    dllistptr newlist = NULL;
+    chneg(dll_init(&newlist),"new list init");
+    chneg(dll_copy(list, newlist, &duplicate_datatype_int, &free_datatype_int),
+            "copying list error");
+    printf("\n\nPrinting copied list\n");
+    dll_print(newlist, &print_int, 0);
     //test deleting all iterators with dll_iteratorDelete
     dll_iteratorDelete(list, iter);
     // Destroy the list    
     dll_destroy(&list, &free_datatype_int);
+    dll_destroy(&newlist, &free_datatype_int);
     free_datatype_int(data);
     return (EXIT_SUCCESS);
 }

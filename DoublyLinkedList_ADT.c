@@ -588,9 +588,81 @@ const void* dll_get_back(dllistptr list, void* (*duplicate)(void*),
         return NULL;
     }
     if (getCopy)
-        return (*duplicate)(list->head->data);
+        return (*duplicate)(list->tail->data);
     else
-        return list->head->data;
+        return list->tail->data;
+}
+
+
+/*
+ * Function that is responsible for copying src list to dest list
+ * Dest list must be initialized and empty
+ * Return values:
+ *      [*] On success, 0 is returned
+ *      [*] On failure, -1 is returned
+ *      [*] On destination list not empty, 2 is returned
+ *      [*] On empty source list, 1 is returned
+ */
+int dll_copy(dllistptr src, dllistptr dest, void* (*duplicate)(void*), 
+        void (*free_data)(void*)) 
+{
+    // check if list is null
+    if (src == NULL) {
+        fprintf(stderr, "dll_copy - Error: Source list has not been initialized\n");
+        return -1;
+    }
+    // check if list is null
+    if (dest == NULL) {
+        fprintf(stderr, "dll_copy - Error: Destination list has not been "
+                "initialized\n");
+        return -1;
+    }
+    if(!dll_isempty(dest)) {
+        fprintf(stderr, "dll_copy - Error: Destination list is not empty\n");
+        return 2;
+    }
+    if(dll_isempty(src)) {
+        fprintf(stderr, "dll_copy - Error: Source list is empty\n"
+                "\tDeleting all iterators now...\n");
+        // invalidate - delete all iterators
+        dll_iteratorDeleteAll(src);
+        return 1;
+    }
+    // iterate through source list
+    IteratorID srcIter = dll_iteratorRequest(src);
+    if (srcIter == -1) {
+        fprintf(stderr, "dll_copy - Error: Requesting iterator for the source "
+        "list failed\n");
+        return -1;
+    }
+    while (1) {
+        // insert data pointed
+        void* data = dll_iteratorGetObj(src, srcIter);
+        if (data == NULL) {
+            fprintf(stderr, "dll_copy - Error: Cannot access data from source"
+                    " list\nDestroying destination list completely\n");
+            dll_destroy(&dest, free_data);
+            return -1;
+        }
+        if (dll_insert_at_back(dest, data, duplicate) == -1) {
+            fprintf(stderr, "dll_copy - Error: Cannot insert data to "
+            " destination list\n"
+                    "Destroying destination list completely\n");
+            dll_destroy(&dest, free_data);
+            return -1;
+        }
+        int retval = dll_iteratorNext(src, srcIter);
+        if (retval == 2)
+            // reached end of the source list, end loop
+            break;
+        else if (retval == -1) {
+            fprintf(stderr, "dll_copy - Error: Cannot iterate through source "
+                    "list\nDestroying destination list completely\n");
+            dll_destroy(&dest, free_data);
+            return -1;
+        }
+    }
+    return 0;
 }
 
 

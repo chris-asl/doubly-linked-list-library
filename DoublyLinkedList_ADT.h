@@ -115,6 +115,16 @@ extern "C" {
      */
     const void* dll_get_back(dllistptr, void* (*)(void*), int);
     /*
+     * Function that is responsible for copying src list to dest list
+     * Dest list must be initialized and empty
+     * Return values:
+     *      [*] On success, 0 is returned
+     *      [*] On failure, -1 is returned
+     *      [*] On destination list not empty, 2 is returned
+     *      [*] On empty source list, 1 is returned
+     */
+    int dll_copy(dllistptr, dllistptr, void* (*)(void*), void (*)(void*));
+    /*
      * Function responsible for appending `list b` to `list a`
      * Upon return, the second list pointer (a.k.a. dllistptr) is going to be freed
      * and nullified, so that it cannot longer be used
