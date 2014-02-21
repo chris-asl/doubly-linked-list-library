@@ -623,9 +623,11 @@ int dll_copy(dllistptr src, dllistptr dest, void* (*duplicate)(void*),
     }
     if(dll_isempty(src)) {
         fprintf(stderr, "dll_copy - Error: Source list is empty\n"
-                "\tDeleting all iterators now...\n");
-        // invalidate - delete all iterators
+                "\tDeleting all iterators now...\n"
+                "\tDestroying destination list completely\n");
+        // invalidate - delete all iterators and dest list
         dll_iteratorDeleteAll(src);
+        dll_destroy(&dest, free_data);
         return 1;
     }
     // iterate through source list
@@ -1280,12 +1282,17 @@ int dll_iteratorDeleteCurrentNode(dllistptr list, IteratorID iterID,
                 current = NULL;
             }
             else {
+                // one and only node left in list
                 list->head = NULL;
                 list->tail = NULL;
                 list->size--;
                 (*free_data)((void*) current->data);
                 free(current);
                 current = NULL;
+                // all the elements of the list have been deleted,
+                // indicate empty list
+                dll_iteratorDeleteAll(list);
+                return 1;
             }
         }
         else if (current == list->tail) {
