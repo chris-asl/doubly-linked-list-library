@@ -622,12 +622,8 @@ int dll_copy(dllistptr src, dllistptr dest, void* (*duplicate)(void*),
         return 2;
     }
     if(dll_isempty(src)) {
-        fprintf(stderr, "dll_copy - Error: Source list is empty\n"
-                "\tDeleting all iterators now...\n"
-                "\tDestroying destination list completely\n");
-        // invalidate - delete all iterators and dest list
-        dll_iteratorDeleteAll(src);
-        dll_destroy(&dest, free_data);
+        fprintf(stderr, "dll_copy - Notify: Source list is empty\n");
+        // nothing to do here
         return 1;
     }
     // iterate through source list
