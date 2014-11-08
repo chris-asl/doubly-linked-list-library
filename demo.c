@@ -8,14 +8,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <locale.h>
-#include "DoublyLinkedList_ADT.h"
+#include "doubly_linked_list_adt.h"
 #include "datatype_int.h"
 
 #define cneg(r) if(r == -1){return -1;}
 #define chneg(r,s) if(r < 0) { fprintf(stderr,s); return -1;}
 
 int main(int argc, char** argv) {
-    dllistptr list = NULL;
+    List list = NULL;
     cneg(dll_init(&list));
 
 
@@ -182,7 +182,7 @@ int main(int argc, char** argv) {
     dll_delete_back(list, &free_datatype_int);
     dll_print(list, &print_int, 1);
     printf("===============================================================\n");
-    dllistptr blist = NULL;
+    List blist = NULL;
     cneg(dll_init(&blist));
     data->num = 8;
     cneg(dll_insert_at_back(blist, data, &duplicate_datatype_int));
@@ -277,7 +277,7 @@ int main(int argc, char** argv) {
     } while (1);
     printf("\n\nDone\n");
     // testing copy list
-    dllistptr newlist = NULL;
+    List newlist = NULL;
     chneg(dll_init(&newlist), "new list init");
     chneg(dll_copy(list, newlist, &duplicate_datatype_int, &free_datatype_int),
         "copying list error");

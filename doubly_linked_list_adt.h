@@ -12,7 +12,7 @@
 extern "C" {
 #endif
 
-    typedef struct DoublyLinkedList_ADT *dllistptr;
+    typedef struct DoublyLinkedList_ADT *List;
     typedef int IteratorID;
     
     /*
@@ -21,18 +21,18 @@ extern "C" {
      *      [*] On success,  0 is returned
      *      [*] On failure,  -1 is returned
      */
-    int dll_init(dllistptr*);
+    int dll_init(List*);
     /*
      * Function returning the size of the list
      */
-    int dll_size(dllistptr);
+    int dll_size(List);
     /*
      * Function responsible for checking if the list is empty
      * Return values:
      *      [*] on empty list, 1 is returned
      *      [*] on non empty list, 0 is returned
      */
-    int dll_isempty(dllistptr);
+    int dll_isempty(List);
     /*
      * Function responsible for printing the list in this fashion:
      *          "element -> element -> element" (delimiter "->")
@@ -40,14 +40,14 @@ extern "C" {
      *      [*] On success,  0 is returned
      *      [*] On failure,  -1 is returned
      */
-    void dll_print(const dllistptr, void (*print_data)(void*), int);
+    void dll_print(const List, void (*print_data)(void*), int);
     /*
      * Function responsible for inserting an element at the end of the list
      * Return values:
      *      [*] On success,  0 is returned
      *      [*] On failure,  -1 is returned
      */
-    int dll_insert_at_back(dllistptr, void*, void* (*)(void*));
+    int dll_insert_at_back(List, void*, void* (*)(void*));
     /*
      * Function responsible for inserting an element at the start of the list
      * The 2nd and 3rd arguments are to be used in conjuction, as the data parameter
@@ -59,7 +59,7 @@ extern "C" {
      *      [*] On success,  0 is returned
      *      [*] On failure,  -1 is returned
      */
-    int dll_insert_at_front(dllistptr, void*, void* (*)(void*));
+    int dll_insert_at_front(List, void*, void* (*)(void*));
     /*
      * Function responsible for inserting an element into the list keeping the list
      * sorted by a comparison defined by the user with a function called issmaller
@@ -68,7 +68,7 @@ extern "C" {
      *      [*] On success,  0 is returned
      *      [*] On failure,  -1 is returned
      */
-    int dll_insert_sorted(dllistptr, void*, int (*)(void*, void*),
+    int dll_insert_sorted(List, void*, int (*)(void*, void*),
             void* (*)(void*));
     /*
      * Inserts the element `data` before the `key` element provided. If the key is 
@@ -77,7 +77,7 @@ extern "C" {
      *      [*]: On success, 0 is returned
      *      [*]: On error or `on key not found`, -1 is returned
      */
-    int dll_insert_before(dllistptr, void*, void* (*)(void*), void*,
+    int dll_insert_before(List, void*, void* (*)(void*), void*,
             int (*)(void*, void*));
     /*
      * Inserts the element `data` after the `key` element provided. If the key is 
@@ -86,7 +86,7 @@ extern "C" {
      *      [*]: On success, 0 is returned
      *      [*]: On error or `on key not found`, -1 is returned
      */
-    int dll_insert_after(dllistptr, void*, void* (*)(void*),
+    int dll_insert_after(List, void*, void* (*)(void*),
             void*, int (*)(void*, void*));
     /*
     * Function that enables accessing data at the list, identified by the 2nd
@@ -95,19 +95,19 @@ extern "C" {
     *      [*] On success, the object is returned
     *      [*] On element not found or on error, NULL is returned
     */
-    void* dll_edit_data(dllistptr, void*, int (*)(void*, void*));
+    void* dll_edit_data(List, void*, int (*)(void*, void*));
     /*
      * Function that returns a copy of the data located at the front (Head) of 
      * the list, if getCopy option is true, or the actual data if the option is
      * set to 0 (false)
      */
-    const void* dll_get_front(dllistptr, void* (*)(void*), int);
+    const void* dll_get_front(List, void* (*)(void*), int);
     /*
      * Function that returns a copy of the data located at the back (Tail) of 
      * the list, if getCopy option is true, or the actual data if the option is
      * set to 0 (false)
      */
-    const void* dll_get_back(dllistptr, void* (*)(void*), int);
+    const void* dll_get_back(List, void* (*)(void*), int);
     /*
      * Function that is responsible for copying src list to dest list
      * Dest list must be initialized and empty
@@ -117,13 +117,13 @@ extern "C" {
      *      [*] On destination list not empty, 2 is returned
      *      [*] On empty source list, 1 is returned
      */
-    int dll_copy(dllistptr, dllistptr, void* (*)(void*), void (*)(void*));
+    int dll_copy(List, List, void* (*)(void*), void (*)(void*));
     /*
      * Function responsible for appending `list b` to `list a`
-     * Upon return, the second list pointer (a.k.a. dllistptr) is going to be freed
+     * Upon return, the second list pointer (a.k.a. List) is going to be freed
      * and nullified, so that it cannot longer be used
      */
-    void dll_append(dllistptr, dllistptr*);
+    void dll_append(List, List*);
     /*
      * Function responsible for deleting the element that contains the `key` 
      * given as a 2nd parameter
@@ -134,19 +134,19 @@ extern "C" {
      *      [*] On element not found,   1 is returned
      *      [*] On error,               -1 is returned
      */
-    int dll_delete(dllistptr, void*, int (*)(void*, void*), void (*)(void*));
+    int dll_delete(List, void*, int (*)(void*, void*), void (*)(void*));
     /*
      * Deletes the tail element of the list
      */
-    void dll_delete_back(dllistptr, void (*)(void*));
+    void dll_delete_back(List, void (*)(void*));
     /*
      * Deletes the head element of the list
      */
-    void dll_delete_front(dllistptr, void (*)(void*));
+    void dll_delete_front(List, void (*)(void*));
     /*
      * Function responsible for freeing all the allocated memory
      */
-    void dll_destroy(dllistptr*, void (*)(void*));
+    void dll_destroy(List*, void (*)(void*));
     /*
      *  Function responsible for allocating a new Iterator object
      *  assigning it to the head of the list and then returning its id 
@@ -154,7 +154,7 @@ extern "C" {
      *      [*] On success, the ID of the Iterator is returned 
      *      [*] On failure, -1 is returned
      */
-    IteratorID dll_iteratorRequest(dllistptr);
+    IteratorID dll_iteratorRequest(List);
     /*
      *  Function responsible for setting the iterator with ID iterID 
      *  to point to the head of the list
@@ -162,7 +162,7 @@ extern "C" {
      *      [*] On success, 0 is returned
      *      [*] On failure, -1 is returned
      */
-    int dll_iteratorBegin(dllistptr, IteratorID);
+    int dll_iteratorBegin(List, IteratorID);
     /*
      *  Function responsible for setting the iterator with ID iterID 
      *  to point to the tail of the list
@@ -170,7 +170,7 @@ extern "C" {
      *      [*] On success, 0 is returned
      *      [*] On failure, -1 is returned
      */
-    int dll_iteratorEnd(dllistptr, IteratorID);
+    int dll_iteratorEnd(List, IteratorID);
     /*
      *  Function responsible for returning the Object into the node
      *  pointed by the iterator
@@ -178,7 +178,7 @@ extern "C" {
      *      [*] On success, the object is returned
      *      [*] On failure, NULL is returned
      */
-    void* dll_iteratorGetObj(dllistptr, IteratorID);
+    void* dll_iteratorGetObj(List, IteratorID);
     /*
      *  Function responsible for setting the iterator to the next node
      *  If by advancing, the iterator is requested to point after the tail
@@ -188,7 +188,7 @@ extern "C" {
      *      [*] On failure, -1 is returned
      *      [*] On the case described above, 1 is returned
      */
-    int dll_iteratorNext(dllistptr, IteratorID);
+    int dll_iteratorNext(List, IteratorID);
     /*
      *  Function responsible for setting the iterator to the previous node
      *  If by requesting the previous node, the iterator points before the head
@@ -200,7 +200,7 @@ extern "C" {
      *          iterators
      *      [*] On the case described above, 2 is returned
      */
-    int dll_iteratorPrev(dllistptr, IteratorID);
+    int dll_iteratorPrev(List, IteratorID);
     /*
      * Function that acts both as a copy constructor and copy function
      * When you need copy constructor functionality, dest IteratorID must be 
@@ -216,7 +216,7 @@ extern "C" {
      *      [*] On iteratorIdxOutOfBounds error, 2 is returned
      * 
      */
-    int dll_iteratorCopy(dllistptr, const IteratorID, IteratorID*);
+    int dll_iteratorCopy(List, const IteratorID, IteratorID*);
     /*
      * Function responsible for deleting the current node pointed by the iterator
      * After the deletion the iterator points to the next element of the list
@@ -229,21 +229,21 @@ extern "C" {
      *         [*] On empty list, 1 is returned to indicate invalidation of 
      *             iterators
      */
-    int dll_iteratorDeleteCurrentNode(dllistptr, IteratorID, void (*)(void*));
+    int dll_iteratorDeleteCurrentNode(List, IteratorID, void (*)(void*));
     /*
      *  Function responsible for deleting the iterator pointed by iterID
      *  Return values:
      *      [*] On success, 0 is returned
      *      [*] On failure, -1 is returned
      */
-    int dll_iteratorDelete(dllistptr, IteratorID);
+    int dll_iteratorDelete(List, IteratorID);
     /*
      *  Function responsible for deleting all iterators 
      *  Return values:
      *      [*] On success, 0 is returned
      *      [*] On failure, -1 is returned
      */
-    int dll_iteratorDeleteAll(dllistptr);
+    int dll_iteratorDeleteAll(List);
     
 
 
