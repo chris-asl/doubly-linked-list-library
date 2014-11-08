@@ -47,7 +47,7 @@ struct DoublyLinkedList_ADT
  * If the list is empty, it will delete all iterators
  * Note: Will not used by the user
  */  
-void dll_iteratorUpdate(List, dllnodeptr, dllnodeptr);
+void dll_iteratorUpdate(list_t, dllnodeptr, dllnodeptr);
 /*
   * Given an IteratorID this function returns the index of the array
   * in which the Iterator is located (currently using linear search)
@@ -55,7 +55,7 @@ void dll_iteratorUpdate(List, dllnodeptr, dllnodeptr);
   *     [*] On success, the index is returned
   *     [*] On element not found, -1 is returned
   */
- int dll_iteratorGetIdxWithID(List, IteratorID);
+ int dll_iteratorGetIdxWithID(list_t, IteratorID);
  /*
   * Given a dllnodeptr this function returns the index of the array
   * in which the Iterator is located (currently using linear search)
@@ -63,7 +63,7 @@ void dll_iteratorUpdate(List, dllnodeptr, dllnodeptr);
   *     [*] On success, the index is returned
   *     [*] On element not found, -1 is returned
   */
- int dll_iteratorGetIdxWithPtr(List, dllnodeptr);
+ int dll_iteratorGetIdxWithPtr(list_t, dllnodeptr);
 
 /*
  * Function responsible for initializing the Doubly Linked List ADT
@@ -71,7 +71,7 @@ void dll_iteratorUpdate(List, dllnodeptr, dllnodeptr);
  *      [*] On success,  0 is returned
  *      [*] On failure,  -1 is returned
  */
-int dll_init(List *listptr_addr)
+int dll_init(list_t *listptr_addr)
 {
     (*listptr_addr) = malloc(sizeof(struct DoublyLinkedList_ADT));
     if ((*listptr_addr) == NULL) {
@@ -90,7 +90,7 @@ int dll_init(List *listptr_addr)
 /*
  * Function returning the size of the list
  */
-int dll_size(List list)
+int dll_size(list_t list)
 {
     return list->size;
 }
@@ -101,7 +101,7 @@ int dll_size(List list)
  *      [*] on empty list, 1 is returned
  *      [*] on non empty list, 0 is returned
  */
-int dll_isempty(List list)
+int dll_isempty(list_t list)
 {
     if (list == NULL) {
         fprintf(stderr, "dll_isempty - Error: DLList has not been initialized\n");
@@ -121,7 +121,7 @@ int dll_isempty(List list)
  *      [*] On success,  0 is returned
  *      [*] On failure,  -1 is returned
  */
-void dll_print(const List list, void (*print_data)(void* data), 
+void dll_print(const list_t list, void (*print_data)(void* data), 
         int print_inline)
 {
     if (list == NULL) {
@@ -174,7 +174,7 @@ void dll_print(const List list, void (*print_data)(void* data),
  *      [*] On success,  0 is returned
  *      [*] On failure,  -1 is returned
  */
-int dll_insert_at_back(List list, void* data, void* (*duplicate)(void*))
+int dll_insert_at_back(list_t list, void* data, void* (*duplicate)(void*))
 {
     // Safety checks firstly
     // 1. Dllist must be initialized
@@ -229,7 +229,7 @@ int dll_insert_at_back(List list, void* data, void* (*duplicate)(void*))
  *      [*] On success,  0 is returned
  *      [*] On failure,  -1 is returned
  */
-int dll_insert_at_front(List list, void* data, void* (*duplicate)(void*))
+int dll_insert_at_front(list_t list, void* data, void* (*duplicate)(void*))
 {
     // Safety checks firstly
     // 1. Dllist must be initialized
@@ -288,7 +288,7 @@ int dll_insert_at_front(List list, void* data, void* (*duplicate)(void*))
  *      [*] Returns 1, if (1st parameter < 2nd parameter)
  *      [*] Returns 0, if (1st parameter >= 2nd parameter) 
  */
-int dll_insert_sorted(List list, void* data, 
+int dll_insert_sorted(list_t list, void* data, 
         int (*issmaller)(void*, void*), void* (*duplicate)(void*))
 {
     /*
@@ -397,7 +397,7 @@ int dll_insert_sorted(List list, void* data,
  *      [*]: On success, 0 is returned
  *      [*]: On error or `on key not found`, -1 is returned
  */
-int dll_insert_before(List list, void* data, void* (*duplicate)(void*),
+int dll_insert_before(list_t list, void* data, void* (*duplicate)(void*),
         void* key, int (*is_equal)(void*, void*)) 
 {
     // Safety checks firstly
@@ -457,7 +457,7 @@ int dll_insert_before(List list, void* data, void* (*duplicate)(void*),
  *      [*]: On success, 0 is returned
  *      [*]: On error or `on key not found`, -1 is returned
  */
-int dll_insert_after(List list, void* data, void* (*duplicate)(void*),
+int dll_insert_after(list_t list, void* data, void* (*duplicate)(void*),
         void* key, int (*is_equal)(void*, void*)) {
     // Safety checks firstly
     // 1. Dllist must be initialized
@@ -516,7 +516,7 @@ int dll_insert_after(List list, void* data, void* (*duplicate)(void*),
  *      [*] On success, the object is returned
  *      [*] On element not found or on error, NULL is returned
  */
-void* dll_edit_data(List list, void* data, int (*is_equal)(void*, void*))
+void* dll_edit_data(list_t list, void* data, int (*is_equal)(void*, void*))
 {
     if (list == NULL) {
         fprintf(stderr, "dll_edit_data - Error: DLList has not been initialized\n");
@@ -548,7 +548,7 @@ void* dll_edit_data(List list, void* data, int (*is_equal)(void*, void*))
  * the list, if getCopy option is true, or the actual data if the option is
  * set to 0 (false)
  */
-const void* dll_get_front(List list, void* (*duplicate)(void*),
+const void* dll_get_front(list_t list, void* (*duplicate)(void*),
         int getCopy) {
     // check if list is null
     if (list == NULL) {
@@ -574,7 +574,7 @@ const void* dll_get_front(List list, void* (*duplicate)(void*),
  * the list, if getCopy option is true, or the actual data if the option is
  * set to 0 (false)
  */
-const void* dll_get_back(List list, void* (*duplicate)(void*), 
+const void* dll_get_back(list_t list, void* (*duplicate)(void*), 
         int getCopy) {
     // check if list is null
     if (list == NULL) {
@@ -604,7 +604,7 @@ const void* dll_get_back(List list, void* (*duplicate)(void*),
  *      [*] On destination list not empty, 2 is returned
  *      [*] On empty source list, 1 is returned
  */
-int dll_copy(List src, List dest, void* (*duplicate)(void*), 
+int dll_copy(list_t src, list_t dest, void* (*duplicate)(void*), 
         void (*free_data)(void*)) 
 {
     // check if list is null
@@ -670,7 +670,7 @@ int dll_copy(List src, List dest, void* (*duplicate)(void*),
  * Upon return, the second list is going to be freed
  * and nullified, so that it cannot longer be used
  */
-void dll_append(List alist, List* listptrb)
+void dll_append(list_t alist, list_t* listptrb)
 {
     //make the tail of `list a` to point to the `list b` head
     (alist->tail)->next = (*listptrb)->head;
@@ -698,7 +698,7 @@ void dll_append(List alist, List* listptrb)
  *      [*] On element not found,   1 is returned
  *      [*] On error,               -1 is returned
  */
-int dll_delete(List list, void* key, int (*is_equal)(void*, void*), 
+int dll_delete(list_t list, void* key, int (*is_equal)(void*, void*), 
                 void (*free_data)(void*))
 {
     if (list == NULL) {
@@ -784,7 +784,7 @@ int dll_delete(List list, void* key, int (*is_equal)(void*, void*),
 /*
  * Deletes the tail element of the list
  */
-void dll_delete_back(List list, void (*free_data)(void* data)) 
+void dll_delete_back(list_t list, void (*free_data)(void* data)) 
 {
     list->size--;
     dllnodeptr deletion = list->tail;
@@ -819,7 +819,7 @@ void dll_delete_back(List list, void (*free_data)(void* data))
 /*
  * Deletes the head element of the list
  */
-void dll_delete_front(List list, void (*free_data)(void* data)) 
+void dll_delete_front(list_t list, void (*free_data)(void* data)) 
 {
     list->size--;
     dllnodeptr deletion = list->head;
@@ -854,7 +854,7 @@ void dll_delete_front(List list, void (*free_data)(void* data))
 /*
  * Function responsible for freeing all the allocated memory
  */
-void dll_destroy(List *dllptr_addr, void (*free_data)(void* data))
+void dll_destroy(list_t *dllptr_addr, void (*free_data)(void* data))
 {
     if (*dllptr_addr == NULL) {
         fprintf(stderr, "dll_destroy - Error: DLList has not been initialized\n");
@@ -896,13 +896,13 @@ void dll_destroy(List *dllptr_addr, void (*free_data)(void* data))
 }
 
 /*
- *  Function responsible for allocating a new Iterator object
+ *  Allocates a new Iterator object
  *  assigning it to the head of the list and then returning its id 
  *  Return values:  
  *      [*] On success, the ID of the Iterator is returned 
  *      [*] On failure, -1 is returned
  */
-IteratorID dll_iteratorRequest(List list)
+IteratorID dll_iteratorRequest(list_t list)
 {
     // check if list is null
     if (list == NULL) {
@@ -935,7 +935,7 @@ IteratorID dll_iteratorRequest(List list)
 }
 
 
- int dll_iteratorGetIdxWithID(List list, IteratorID iterID)
+ int dll_iteratorGetIdxWithID(list_t list, IteratorID iterID)
  {
     int idx;
     for (idx = 0; idx < list->iteratorsCount; idx++) {
@@ -946,7 +946,7 @@ IteratorID dll_iteratorRequest(List list)
  }
  
 
- int dll_iteratorGetIdxWithPtr(List list, dllnodeptr node)
+ int dll_iteratorGetIdxWithPtr(list_t list, dllnodeptr node)
  {
     int idx;
     for (idx = 0; idx < list->iteratorsCount; idx++) {
@@ -957,13 +957,13 @@ IteratorID dll_iteratorRequest(List list)
  }
  
  /*
-  * Function responsible for taking two nodes (dllnodeptr) acting as old and new
+  * Takes two nodes (dllnodeptr) acting as old and new
   * finding all the iterators that point to old and updating them to point
   * to the new node
   * If the list is empty, it will delete all iterators
   * Note: Will not used by the user
   */    
- void dll_iteratorUpdate(List list, dllnodeptr old, dllnodeptr new)
+ void dll_iteratorUpdate(list_t list, dllnodeptr old, dllnodeptr new)
  {
     if (dll_isempty(list))
         dll_iteratorDeleteAll(list);
@@ -978,14 +978,14 @@ IteratorID dll_iteratorRequest(List list)
  
  
 /*
- *  Function responsible for setting the iterator with ID iterID 
+ *  Sets the iterator with ID iterID 
  *  to point to the head of the list
  *  Return values:
  *      [*] On success, 0 is returned
  *      [*] On failure, -1 is returned
  *      [*] On empty list, 1 is returned to indicate invalidation of iterators
  */
-int dll_iteratorBegin(List list, IteratorID iterID)
+int dll_iteratorBegin(list_t list, IteratorID iterID)
 {
     // check if list is null
     if (list == NULL) {
@@ -1012,14 +1012,14 @@ int dll_iteratorBegin(List list, IteratorID iterID)
 }
 
 /*
- *  Function responsible for setting the iterator with ID iterID 
+ *  Sets the iterator with ID iterID 
  *  to point to the tail of the list
  *  Return values:
  *      [*] On success, 0 is returned
  *      [*] On failure, -1 is returned
  *      [*] On empty list, 1 is returned to indicate invalidation of iterators
  */
-int dll_iteratorEnd(List list, IteratorID iterID)
+int dll_iteratorEnd(list_t list, IteratorID iterID)
 {
     // check if list is null
     if (list == NULL) {
@@ -1046,13 +1046,12 @@ int dll_iteratorEnd(List list, IteratorID iterID)
 }
 
 /*
- *  Function responsible for returning the Object into the node
- *  pointed by the iterator
+ *  Returns the object of the node that is pointed by the iterator
  *  Return values:
  *      [*] On success, the object is returned
  *      [*] On failure, NULL is returned
  */
- void* dll_iteratorGetObj(List list, IteratorID iterID)
+ void* dll_iteratorGetObj(list_t list, IteratorID iterID)
  {
      // check if list is null
     if (list == NULL) {
@@ -1078,16 +1077,16 @@ int dll_iteratorEnd(List list, IteratorID iterID)
  }
 
 /*
- *  Function responsible for setting the iterator to the next node
+ *  Sets the iterator to the next node
  *  If by advancing, the iterator is requested to point after the tail
- *  of the list, 1 is returned
+ *  of the list, 2 is returned
  *  Return values:
  *      [*] On success, 0 is returned
  *      [*] On failure, -1 is returned
  *      [*] On empty list, 1 is returned to indicate invalidation of iterators
  *      [*] On the case described above, 2 is returned
  */
- int dll_iteratorNext(List list, IteratorID iterID)
+ int dll_iteratorNext(list_t list, IteratorID iterID)
  {
      // check if list is null
     if (list == NULL) {
@@ -1119,16 +1118,16 @@ int dll_iteratorEnd(List list, IteratorID iterID)
  }
 
  /*
- *  Function responsible for setting the iterator to the previous node
+ *  Sets the iterator to the previous node
  *  If by requesting the previous node, the iterator points before the head
- *  of the list, 1 is returned
+ *  of the list, 2 is returned
  *  Return values:
  *      [*] On success, 0 is returned
  *      [*] On failure, -1 is returned
  *      [*] On empty list, 1 is returned to indicate invalidation of iterators
  *      [*] On the case described above, 2 is returned
  */
- int dll_iteratorPrev(List list, IteratorID iterID)
+ int dll_iteratorPrev(list_t list, IteratorID iterID)
  {
      // check if list is null
     if (list == NULL) {
@@ -1160,7 +1159,7 @@ int dll_iteratorEnd(List list, IteratorID iterID)
 }
 
 /*
- * Function that acts both as a copy constructor and copy function
+ * Acts both as a copy constructor and copy function
  * When you need copy constructor functionality, dest IteratorID must be 
  * NULL, and this function will allocate a new iterator setting it 
  * to point to the node that src Iterator points
@@ -1174,7 +1173,7 @@ int dll_iteratorEnd(List list, IteratorID iterID)
  *      [*] On iteratorIdxOutOfBounds error, 2 is returned
  * 
  */
-int dll_iteratorCopy(List list, const IteratorID src, IteratorID *dest) 
+int dll_iteratorCopy(list_t list, const IteratorID src, IteratorID *dest) 
 {
     // check if list is null or empty
     if (list == NULL) {
@@ -1225,9 +1224,9 @@ int dll_iteratorCopy(List list, const IteratorID src, IteratorID *dest)
 }
  
  /*
-  * Function responsible for deleting the current node pointed by the iterator
+  * Deletes the current node pointed by the iterator
   * After the deletion the iterator points to the next element of the list
-  * (towards the end). If the element to be destroyed is the last element of the
+  * (towards the tail). If the element to be destroyed is the last element of the
   * list, which means that the list will be empty, all the iterators are 
   * invalidated
   * Return values:
@@ -1236,7 +1235,7 @@ int dll_iteratorCopy(List list, const IteratorID src, IteratorID *dest)
   *         [*] On empty list, 1 is returned to indicate invalidation of 
   *             iterators
   */
-int dll_iteratorDeleteCurrentNode(List list, IteratorID iterID,
+int dll_iteratorDeleteCurrentNode(list_t list, IteratorID iterID,
         void (*free_data)(void*))
 {
     // check if list is null or empty
@@ -1321,13 +1320,13 @@ int dll_iteratorDeleteCurrentNode(List list, IteratorID iterID,
 }
 
 /*
- *  Function responsible for deleting the iterator pointed by iterID
+ *  Deletes the iterator pointed by iterID
  *  and then invalidating the iterID
  *  Return values:
  *      [*] On success, 0 is returned
  *      [*] On failure, -1 is returned
  */
-int dll_iteratorDelete(List list, IteratorID iterID)
+int dll_iteratorDelete(list_t list, IteratorID iterID)
 {
     // firstly check if list is null or empty
      if (list == NULL) {
@@ -1376,12 +1375,12 @@ int dll_iteratorDelete(List list, IteratorID iterID)
 }
 
 /*
- *  Function responsible for deleting all iterators 
+ *  Deletes all the iterators
  *  Return values:
  *      [*] On success, 0 is returned
  *      [*] On failure, -1 is returned
  */
-int dll_iteratorDeleteAll(List list)
+int dll_iteratorDeleteAll(list_t list)
 {
     //firstly check if list is null
     if (list == NULL) {

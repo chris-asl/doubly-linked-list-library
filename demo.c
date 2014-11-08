@@ -14,8 +14,8 @@
 #define cneg(r) if(r == -1){return -1;}
 #define chneg(r,s) if(r < 0) { fprintf(stderr,s); return -1;}
 
-int main(int argc, char** argv) {
-    List list = NULL;
+int main(void) {
+    list_t list = NULL;
     cneg(dll_init(&list));
 
 
@@ -182,7 +182,7 @@ int main(int argc, char** argv) {
     dll_delete_back(list, &free_datatype_int);
     dll_print(list, &print_int, 1);
     printf("===============================================================\n");
-    List blist = NULL;
+    list_t blist = NULL;
     cneg(dll_init(&blist));
     data->num = 8;
     cneg(dll_insert_at_back(blist, data, &duplicate_datatype_int));
@@ -202,7 +202,6 @@ int main(int argc, char** argv) {
     }
     IteratorID iter2 = dll_iteratorRequest(list);
     dll_iteratorEnd(list, iter2);
-    IteratorID iter3 = dll_iteratorRequest(list);
     dll_iteratorDeleteAll(list);
     iter = dll_iteratorRequest(list);
     if (iter < 0) {
@@ -277,7 +276,7 @@ int main(int argc, char** argv) {
     } while (1);
     printf("\n\nDone\n");
     // testing copy list
-    List newlist = NULL;
+    list_t newlist = NULL;
     chneg(dll_init(&newlist), "new list init");
     chneg(dll_copy(list, newlist, &duplicate_datatype_int, &free_datatype_int),
         "copying list error");
