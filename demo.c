@@ -14,25 +14,25 @@
 #define cneg(r) if(r == -1){return -1;}
 #define chneg(r,s) if(r < 0) { fprintf(stderr,s); return -1;}
 
-
 int main(int argc, char** argv) {
     dllistptr list = NULL;
     cneg(dll_init(&list));
-    
 
-    
+
+
     Data_int data;
     // Inserting dummy data
     data = allocate_datatype_int();
     data->num = 5;
-    Data_int retval = dll_edit_data(list, (void*)data, &is_equal_int);
+    Data_int retval = dll_edit_data(list, (void*) data, &is_equal_int);
     if (retval == NULL)
-        printf("Element not found\n");
+        printf("Element not found (as it supposed to be)\n");
     else {
         printf("Found this element: ");
-        print_int((void*)retval); putchar('\n');
+        print_int((void*) retval);
+        putchar('\n');
     }
-//    cneg(dll_insert_sorted(list, data, &issmaller_int, &duplicate_datatype_int));
+    //    cneg(dll_insert_sorted(list, data, &issmaller_int, &duplicate_datatype_int));
     data->num = 2;
     cneg(dll_insert_sorted(list, data, &issmaller_int, &duplicate_datatype_int));
     IteratorID invalidationTest = dll_iteratorRequest(list);
@@ -40,28 +40,37 @@ int main(int argc, char** argv) {
         dll_destroy(&list, &free_datatype_int);
         return -1;
     }
-    dll_iteratorBegin(list, invalidationTest);
     Data_int returned = dll_iteratorGetObj(list, invalidationTest);
     if (returned) {
-        printf("\t\t\t");print_int(returned); printf("\n");
+        printf("\t\t\tItem at start:");
+        print_int(returned);
+        printf("\n");
     }
     data->num = -6;
-    cneg(dll_insert_at_front(list, (void*)data, &duplicate_datatype_int));
+    cneg(dll_insert_at_front(list, (void*) data, &duplicate_datatype_int));
     returned = dll_iteratorGetObj(list, invalidationTest);
     if (returned) {
-        printf("\t\t\t");print_int(returned); printf("\n");
+        printf("\t\t\tInserted at front, old item will be returned by the "
+            "iterator (as it stays pointing to the old one): ");
+        print_int(returned);
+        printf("\n");
     }
     dll_print(list, &print_int, 1);
     dll_iteratorBegin(list, invalidationTest);
     returned = dll_iteratorGetObj(list, invalidationTest);
     if (returned) {
-        printf("\t\t\t");print_int(returned); printf("\n");
+        printf("\t\t\tNow the new item will be returned by the "
+            "iterator (as iterator was updated to point to head): ");
+        print_int(returned);
+        printf("\n");
     }
     //delete last element and check where the iterator points
     dll_delete_back(list, &free_datatype_int);
     returned = dll_iteratorGetObj(list, invalidationTest);
     if (returned) {
-        printf("\t\t\t");print_int(returned); printf("\n");
+        printf("\t\t\tItem pointed by the iterator (after deleting back): ");
+        print_int(returned);
+        printf("\n");
     }
     printf("===============================================================\n");
     printf("Testing invalidation of iterator\n");
@@ -71,13 +80,13 @@ int main(int argc, char** argv) {
     Data_int delthis = NULL;
     delthis = allocate_datatype_int();
     delthis->num = -6;
-    dll_delete(list, (void*)delthis, &is_equal_int, &free_datatype_int);
+    dll_delete(list, (void*) delthis, &is_equal_int, &free_datatype_int);
     dll_print(list, &print_int, 1);
     // test after deleting an element
-//    print_int(dll_iteratorGetObj(list, invalidationTest));
+    //    print_int(dll_iteratorGetObj(list, invalidationTest));
     delthis->num = 2;
     printf("Deleting element (-2) result: %d\n",
-            dll_delete(list, (void*)delthis, &is_equal_int, &free_datatype_int));
+        dll_delete(list, (void*) delthis, &is_equal_int, &free_datatype_int));
     free_datatype_int(delthis);
     dll_print(list, &print_int, 1);
     // now let's see what happened with the iterator
@@ -94,55 +103,56 @@ int main(int argc, char** argv) {
     cneg(dll_insert_sorted(list, data, &issmaller_int, &duplicate_datatype_int));
     dll_print(list, &print_int, 0);
     printf("===============================================================\n");
-    
+
     // Adding a new key 
     Data_int key = NULL;
     key = allocate_datatype_int();
     key->num = 5;
     // Using a search-like function to get the item with num == 5
-    retval = dll_edit_data(list, (void*)key, &is_equal_int);
+    retval = dll_edit_data(list, (void*) key, &is_equal_int);
     if (retval == NULL)
         printf("Element not found\n");
     else {
         printf("Found this element: ");
-        print_int((void*)retval); putchar('\n');
+        print_int((void*) retval);
+        putchar('\n');
         retval->num = 10000;
     }
     // Freeing the key allocated data
-    free_datatype_int((void*)key);
-    
-    
+    free_datatype_int((void*) key);
+
+
     // Creating a num that exists in the list and deleting this item from the list
     delthis = NULL;
     delthis = allocate_datatype_int();
     delthis->num = -6;
-    dll_delete(list, (void*)delthis, &is_equal_int, &free_datatype_int);
+    dll_delete(list, (void*) delthis, &is_equal_int, &free_datatype_int);
     dll_print(list, &print_int, 1);
- 
-    
+
+
     // Try and find the element that was deleted
     key = allocate_datatype_int();
     key->num = -6;
-    retval = dll_edit_data(list, (void*)key, &is_equal_int);
+    retval = dll_edit_data(list, (void*) key, &is_equal_int);
     if (retval == NULL)
         printf("Element not found\n");
     else
-        print_int((void*)retval);
-    free_datatype_int((void*)key);
-    
-    
+        print_int((void*) retval);
+    free_datatype_int((void*) key);
+
+
     // Delete another list item
     delthis->num = 150;
-    dll_delete(list, (void*)delthis, &is_equal_int, &free_datatype_int);
+    dll_delete(list, (void*) delthis, &is_equal_int, &free_datatype_int);
     free_datatype_int(delthis);
     dll_print(list, &print_int, 0);
     printf("===============================================================\n");
-    printf("dll_get_front: "); 
+    printf("dll_get_front: ");
     retval = dll_get_front(list, &duplicate_datatype_int, 1);
     print_int(retval);
     free_datatype_int(retval);
     putchar('\n');
-    printf("dll_get_back: "); 
+    printf("dll_get_back: ");
     retval = dll_get_back(list, &duplicate_datatype_int, 1);
     print_int(retval);
     free_datatype_int(retval);
@@ -151,7 +161,7 @@ int main(int argc, char** argv) {
     printf("===============================================================\n");
     //testing insert at back/front
     data->num = 12345;
-    cneg(dll_insert_at_back(list, data, &duplicate_datatype_int)); 
+    cneg(dll_insert_at_back(list, data, &duplicate_datatype_int));
     data->num = 54321;
     cneg(dll_insert_at_front(list, data, &duplicate_datatype_int));
     dll_print(list, &print_int, 1);
@@ -191,7 +201,7 @@ int main(int argc, char** argv) {
         return -1;
     }
     IteratorID iter2 = dll_iteratorRequest(list);
-    dll_iteratorEnd(list,iter2);
+    dll_iteratorEnd(list, iter2);
     IteratorID iter3 = dll_iteratorRequest(list);
     dll_iteratorDeleteAll(list);
     iter = dll_iteratorRequest(list);
@@ -213,15 +223,14 @@ int main(int argc, char** argv) {
             fprintf(stderr, "Error printing my list\n");
             dll_destroy(&list, &free_datatype_int);
             return -1;
-        }
-        else if (ret == 2) //end of list
+        } else if (ret == 2) //end of list
             break;
-    }while(1);
+    } while (1);
     printf("List contents (from tail to head): \n");
     temp = NULL;
-    
-//    IteratorID iter2 = -1;
-//    dll_iteratorCopy(list, iter, &iter2);
+
+    //    IteratorID iter2 = -1;
+    //    dll_iteratorCopy(list, iter, &iter2);
     do {
         printf("\t");
         temp = dll_iteratorGetObj(list, iter);
@@ -233,10 +242,9 @@ int main(int argc, char** argv) {
             fprintf(stderr, "Error printing my list\n");
             dll_destroy(&list, &free_datatype_int);
             return -1;
-        }
-        else if (ret == 2) //end of list
+        } else if (ret == 2) //end of list
             break;
-    }while(1);
+    } while (1);
     //test delete iterator
     dll_iteratorDelete(list, iter2);
     //test using the deleted
@@ -244,7 +252,7 @@ int main(int argc, char** argv) {
     dll_iteratorEnd(list, iter2);
     // test DeleteAllIterators
     dll_iteratorDeleteAll(list);
-    
+
     iter = dll_iteratorRequest(list);
     if (iter < 0) {
         dll_destroy(&list, &free_datatype_int);
@@ -264,16 +272,15 @@ int main(int argc, char** argv) {
             fprintf(stderr, "Error printing my list\n");
             dll_destroy(&list, &free_datatype_int);
             return -1;
-        }
-        else if (ret == 2) //end of list
+        } else if (ret == 2) //end of list
             break;
-    }while(1);
+    } while (1);
     printf("\n\nDone\n");
     // testing copy list
     dllistptr newlist = NULL;
-    chneg(dll_init(&newlist),"new list init");
+    chneg(dll_init(&newlist), "new list init");
     chneg(dll_copy(list, newlist, &duplicate_datatype_int, &free_datatype_int),
-            "copying list error");
+        "copying list error");
     printf("\n\nPrinting copied list\n");
     dll_print(newlist, &print_int, 0);
     //test deleting all iterators with dll_iteratorDelete

@@ -14,7 +14,7 @@ extern "C" {
 
     typedef struct DoublyLinkedList_ADT *dllistptr;
     typedef int IteratorID;
-
+    
     /*
      * Function responsible for initializing the Doubly Linked List ADT
      * Return values:
@@ -89,18 +89,12 @@ extern "C" {
     int dll_insert_after(dllistptr, void*, void* (*)(void*),
             void*, int (*)(void*, void*));
     /*
-     * Function responsible for inserting an element into the list while keeping it
-     * sorted by a comparison defined by the user with a function called 
-     * issmaller(*). Elements are going to be inserted in ascending order starting 
-     * from the head
-     * Return values:
-     *      [*] On success,  0 is returned
-     *      [*] On failure,  -1 is returned
-     * 
-     * (*): issmaller must be a function that:
-     *      [*] Returns 1, if (1st parameter < 2nd parameter)
-     *      [*] Returns 0, if (1st parameter >= 2nd parameter) 
-     */
+    * Function that enables accessing data at the list, identified by the 2nd
+    * argument, with an is_equal type function as 3rd argument
+    * Return values:
+    *      [*] On success, the object is returned
+    *      [*] On element not found or on error, NULL is returned
+    */
     void* dll_edit_data(dllistptr, void*, int (*)(void*, void*));
     /*
      * Function that returns a copy of the data located at the front (Head) of 
@@ -250,6 +244,7 @@ extern "C" {
      *      [*] On failure, -1 is returned
      */
     int dll_iteratorDeleteAll(dllistptr);
+    
 
 
 #ifdef	__cplusplus

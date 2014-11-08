@@ -36,6 +36,7 @@ struct DoublyLinkedList_ADT
     int size;
     dlliterator *iteratorsArray; 
     int iteratorsCount;
+    IteratorID id_counter;
 };
 
 // Forward declaration of non API functions
@@ -677,6 +678,8 @@ void dll_append(dllistptr alist, dllistptr* listptrb)
     ((*listptrb)->head)->previous = alist->tail;
     //update `list a` tail
     alist->tail = (*listptrb)->tail;
+    //update sizes
+    alist->size += (*listptrb)->size;
     //free `list b`
     (*listptrb)->head = NULL;
     (*listptrb)->tail = NULL;
@@ -914,7 +917,7 @@ IteratorID dll_iteratorRequest(dllistptr list)
         dll_iteratorDeleteAll(list);
         return 1;
     }
-    static IteratorID id = 1;
+//    static IteratorID id = 1;
     void* tmp = realloc(list->iteratorsArray, (list->iteratorsCount + 1) * sizeof(dlliterator));
     if (tmp == NULL) {
         perror("dll_requestIterator - Error: Cannot allocate iterator");
@@ -922,14 +925,14 @@ IteratorID dll_iteratorRequest(dllistptr list)
     }
     else
         list->iteratorsArray = tmp;
-    (list->iteratorsArray[list->iteratorsCount]).id = id;
+    (list->iteratorsArray[list->iteratorsCount]).id = list->id_counter;
     list->iteratorsCount++;
     // set Iterator to point to the head
-    if (dll_iteratorBegin(list, id) < 0) {
+    if (dll_iteratorBegin(list, list->id_counter) < 0) {
         fprintf(stderr, "dll_requestIterator - Error: Cannot set iterator to list head\n");
         return -1;
     }
-    return id++;
+    return list->id_counter++;
 }
 
 

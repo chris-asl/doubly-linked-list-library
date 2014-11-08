@@ -1,6 +1,9 @@
 #ignore Netbeans dirs and files
-./nbproject/*
-./dist/*
-./build/*
+Makefile
 list
-dep.inc
+.dep.inc
+*.sublime-project
+*.sublime-workspace
+build/
+dist/
+nbproject/
