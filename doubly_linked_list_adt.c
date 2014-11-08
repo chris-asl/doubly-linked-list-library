@@ -667,7 +667,7 @@ int dll_copy(List src, List dest, void* (*duplicate)(void*),
 
 /*
  * Function responsible for appending `list b` to `list a`
- * Upon return, the second list pointer (a.k.a. List) is going to be freed
+ * Upon return, the second list is going to be freed
  * and nullified, so that it cannot longer be used
  */
 void dll_append(List alist, List* listptrb)
@@ -917,7 +917,6 @@ IteratorID dll_iteratorRequest(List list)
         dll_iteratorDeleteAll(list);
         return 1;
     }
-//    static IteratorID id = 1;
     void* tmp = realloc(list->iteratorsArray, (list->iteratorsCount + 1) * sizeof(dlliterator));
     if (tmp == NULL) {
         perror("dll_requestIterator - Error: Cannot allocate iterator");
@@ -958,7 +957,7 @@ IteratorID dll_iteratorRequest(List list)
  }
  
  /*
-  * Function responsible for taking two dllnodeptr acting as old and new
+  * Function responsible for taking two nodes (dllnodeptr) acting as old and new
   * finding all the iterators that point to old and updating them to point
   * to the new node
   * If the list is empty, it will delete all iterators
