@@ -50,7 +50,7 @@ struct DoublyLinkedList_ADT
 void dll_iteratorUpdate(list_t, dllnodeptr, dllnodeptr);
 /*
   * Given an IteratorID this function returns the index of the array
-  * in which the Iterator is located (currently using linear search)
+  * in which the Iterator is located (using binary search)
   * Return values:
   *     [*] On success, the index is returned
   *     [*] On element not found, -1 is returned
@@ -58,12 +58,14 @@ void dll_iteratorUpdate(list_t, dllnodeptr, dllnodeptr);
  int dll_iteratorGetIdxWithID(list_t, IteratorID);
  /*
   * Given a dllnodeptr this function returns the index of the array
-  * in which the Iterator is located (currently using linear search)
+  * in which the Iterator is located (using linear search)
   * Return values:
   *     [*] On success, the index is returned
   *     [*] On element not found, -1 is returned
   */
  int dll_iteratorGetIdxWithPtr(list_t, dllnodeptr);
+ 
+  int dll_iteratorBinarySearch(list_t, IteratorID, int, int);
 
 /*
  * Function responsible for initializing the Doubly Linked List ADT
@@ -83,6 +85,7 @@ int dll_init(list_t *listptr_addr)
     (*listptr_addr)->size = 0;
     (*listptr_addr)->iteratorsArray = NULL;
     (*listptr_addr)->iteratorsCount = 0;
+    (*listptr_addr)->id_counter = 0;
     return 0;
 }
 
@@ -937,12 +940,24 @@ IteratorID dll_iteratorRequest(list_t list)
 
  int dll_iteratorGetIdxWithID(list_t list, IteratorID iterID)
  {
-    int idx;
-    for (idx = 0; idx < list->iteratorsCount; idx++) {
-        if ((list->iteratorsArray[idx]).id == iterID)
-            return idx;
-    }
-    return -1;
+     if (list->iteratorsCount > 0)
+        return dll_iteratorBinarySearch(list, iterID, 0, list->iteratorsCount - 1);
+     else
+        return -1;
+ }
+ 
+ int dll_iteratorBinarySearch(list_t list, IteratorID key, int start, int end) {
+     int middle_idx = (end - start) / 2 + start;
+     int current_id = (list->iteratorsArray[middle_idx]).id;
+     if (current_id == key)
+         return middle_idx;
+     else if (start == end)
+         return -1;
+     else if (key < current_id && middle_idx > 0)
+         return dll_iteratorBinarySearch(list, key, 0, middle_idx - 1);
+     else if (key > current_id && middle_idx < list->iteratorsCount)
+         return dll_iteratorBinarySearch(list, key, middle_idx + 1, list->iteratorsCount - 1);
+     return -1;
  }
  
 
