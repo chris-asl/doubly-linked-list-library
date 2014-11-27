@@ -3,7 +3,7 @@ A doubly linked list C-API that can accept any data type that is wrapped within 
 It is implemented with opaque pointers for abstraction and security. 
 
 ## Introducing version 2.0 - Iterators
-**A brief changelog:**  
+**A brief changelog**  
 1. Added support for iterators (look below for more info)  
 2. Changed ugly `dllistptr` to a more [user and C]-friendly naming convention, that is `list_t` (**important**)  
 3. Renamed the API files to a more C-like naming convention, like this: `doubly_linked_list_adt.c/h`  
@@ -11,6 +11,13 @@ It is implemented with opaque pointers for abstraction and security.
 5. This version was extensively tested with a multithreaded project, that used the list with about 10 datatypes  
 6. Added a copy-constructor-like method to copy lists  
 7. *In big programs, compile with -O2 or -O3 to see the magic*
+
+## Changelog
+~~~
+[*] 2.1 - Upgraded search/ access of iterators (from linear to binary search)
+[*] 2.0 - Iterators support
+[*] 1.0 - Initial release
+~~~
 
 ##Getting started with the API
 1. You will need to copy the `doubly_linked_list_adt.c` and `doubly_linked_list_adt.h` files  to your project and include the header file to your source code
