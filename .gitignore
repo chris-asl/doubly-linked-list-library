@@ -1,0 +1,7 @@
+.dep.inc
+*.sublime-*
+Makefile
+build/*
+dist/*
+list
+nbproject/*
