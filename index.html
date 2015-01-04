@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Doubly-linked-list-api : A doubly linked list C API that can accept any Data type that provides a set of requested methods">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Doubly-linked-list-api</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/chris-asl/doubly-linked-list-API">View on GitHub</a>
+
+          <h1 id="project_title">Doubly-linked-list-api</h1>
+          <h2 id="project_tagline">A doubly linked list C API that can accept any Data type that provides a set of requested methods</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/chris-asl/doubly-linked-list-API/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/chris-asl/doubly-linked-list-API/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a id="doubly-linked-list-c-api" class="anchor" href="#doubly-linked-list-c-api" aria-hidden="true"><span class="octicon octicon-link"></span></a>Doubly Linked List C-API</h1>
+
+<p>A doubly linked list C-API that can accept any data type that is wrapped within a struct and provides a set of requested methods.<br>
+It is implemented with opaque pointers for abstraction and security. </p>
+
+<h2>
+<a id="introducing-version-20---iterators" class="anchor" href="#introducing-version-20---iterators" aria-hidden="true"><span class="octicon octicon-link"></span></a>Introducing version 2.0 - Iterators</h2>
+
+<p><strong>A brief changelog</strong><br>
+1. Added support for iterators (look below for more info)<br>
+2. Changed ugly <code>dllistptr</code> to a more [user and C]-friendly naming convention, that is <code>list_t</code> (<strong>important</strong>)<br>
+3. Renamed the API files to a more C-like naming convention, like this: <code>doubly_linked_list_adt.c/h</code><br>
+4. Updated demo to include some of the iterator functionality<br>
+5. This version was extensively tested with a multithreaded project, that used the list with about 10 datatypes<br>
+6. Added a copy-constructor-like method to copy lists<br>
+7. <em>In big programs, compile with -O2 or -O3 to see the magic</em></p>
+
+<h2>
+<a id="changelog" class="anchor" href="#changelog" aria-hidden="true"><span class="octicon octicon-link"></span></a>Changelog</h2>
+
+<pre><code>[*] 2.1 - Upgraded search/ access of iterators (from linear to binary search)
+[*] 2.0 - Iterators support
+[*] 1.0 - Initial release
+</code></pre>
+
+<h2>
+<a id="getting-started-with-the-api" class="anchor" href="#getting-started-with-the-api" aria-hidden="true"><span class="octicon octicon-link"></span></a>Getting started with the API</h2>
+
+<ol>
+<li>You will need to copy the <code>doubly_linked_list_adt.c</code> and <code>doubly_linked_list_adt.h</code> files  to your project and include the header file to your source code</li>
+<li>Implement the required functions for the API, stated <a href="DATATYPE_REQUIREMENTS.md"><strong>here</strong></a>, in a source file and provide the prototypes in a header file</li>
+<li>To use a list, declare a <code>list_t</code> variable and pass it to <code>dll_init</code> function</li>
+<li>
+<p>Declare and prepare a <em>Datatype</em> dummy variable, allocate it with your function and call any of the <code>dll_insert*</code> variants (depending on your needs) </p>
+
+<blockquote>
+<p><strong>N.B.:</strong> To add other elements to the list, <strong>don't allocate an object again</strong>, just update the previous one to insert it</p>
+</blockquote>
+</li>
+<li><p>When you're done with your list, only then you call the <em>free_datatype</em> function you've written  </p></li>
+<li>Finally, pass the <code>list_t</code> variable to <code>dll_destroy</code> function to deallocate the memory needed</li>
+</ol>
+
+<h2>
+<a id="documentation-for-each-aspect-of-the-project-can-be-found-here" class="anchor" href="#documentation-for-each-aspect-of-the-project-can-be-found-here" aria-hidden="true"><span class="octicon octicon-link"></span></a>Documentation for each aspect of the project can be found here</h2>
+
+<ul>
+<li><a href="API_METHODS.md"><strong>Core API</strong></a></li>
+<li><a href="ITER_METHODS.md"><strong>Iterators API</strong></a></li>
+<li><a href="DATATYPE_REQUIREMENTS.md"><strong>Datatype requirements</strong></a></li>
+</ul>
+
+<hr>
+
+<p><strong>For anything you might need, suggestion, bug report, create a new issue or a pull-request</strong></p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Doubly-linked-list-api maintained by <a href="https://github.com/chris-asl">chris-asl</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-42440163-3");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+
+  </body>
+</html>
