@@ -1,5 +1,5 @@
 #ignore Netbeans dirs and files
-Makefile
+Makefile.netbeans
 list
 .dep.inc
 *.sublime-project
