@@ -2,7 +2,7 @@
 A doubly linked list C-API that can accept any data type that is wrapped within a struct and provides a set of requested methods.  
 It is implemented with opaque pointers for abstraction and security. 
 
-## Introducing version 2.0 - Iterators
+## Introducing version 2.1 - Iterators
 **A brief changelog**  
 1. Added support for iterators (look below for more info)  
 2. Changed ugly `dllistptr` to a more [user and C]-friendly naming convention, that is `list_t` (**important**)  
@@ -10,7 +10,8 @@ It is implemented with opaque pointers for abstraction and security.
 4. Updated demo to include some of the iterator functionality  
 5. This version was extensively tested with a multithreaded project, that used the list with about 10 datatypes  
 6. Added a copy-constructor-like method to copy lists  
-7. *In big programs, compile with -O2 or -O3 to see the magic*
+7. Binary search to access find the associated element in the list of iterators  
+8. *In big programs, compile with -O2 or -O3 to see the magic*
 
 ## Changelog
 ~~~
