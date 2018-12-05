@@ -1,12 +1,12 @@
-#Doubly Linked List C-API#
-A doubly linked list C-API that can accept any data type that is wrapped within a struct and provides a set of requested methods.  
+# Doubly Linked List Library #
+A doubly linked list library in C that can accept any data type that is wrapped within a struct and provides a set of requested methods.  
 It is implemented with opaque pointers for abstraction and security. 
 
 ## Introducing version 2.1 - Iterators
 **A brief changelog**  
 1. Added support for iterators (look below for more info)  
 2. Changed ugly `dllistptr` to a more [user and C]-friendly naming convention, that is `list_t` (**important**)  
-3. Renamed the API files to a more C-like naming convention, like this: `doubly_linked_list_adt.c/h`  
+3. Renamed the library files to a more C-like naming convention, like this: `doubly_linked_list_adt.c/h`  
 4. Updated demo to include some of the iterator functionality  
 5. This version was extensively tested with a multithreaded project, that used the list with about 10 datatypes  
 6. Added a copy-constructor-like method to copy lists  
@@ -20,9 +20,9 @@ It is implemented with opaque pointers for abstraction and security.
 [*] 1.0 - Initial release
 ~~~
 
-##Getting started with the API
+##Getting started with the library
 1. You will need to copy the `doubly_linked_list_adt.c` and `doubly_linked_list_adt.h` files  to your project and include the header file to your source code
-2. Implement the required functions for the API, stated [**here**](DATATYPE_REQUIREMENTS.md), in a source file and provide the prototypes in a header file
+2. Implement the required functions for the library, stated [**here**](DATATYPE_REQUIREMENTS.md), in a source file and provide the prototypes in a header file
 3. To use a list, declare a `list_t` variable and pass it to `dll_init` function
 4. Declare and prepare a *Datatype* dummy variable, allocate it with your function and call any of the `dll_insert*` variants (depending on your needs) 
 
